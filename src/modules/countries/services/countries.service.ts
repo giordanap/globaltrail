@@ -2,9 +2,11 @@ import { restCountriesClient } from "@/core/api/rest-countries/rest-countries.cl
 import { ProviderApiError } from "@/core/errors/provider-api-error";
 import {
   mapRestCountriesToCountrySummaries,
+  mapRestCountryToCountry,
   sortCountrySummaries,
 } from "@/modules/countries/mappers";
 import type {
+  Country,
   CountrySummary,
   RestCountryDto,
 } from "@/modules/countries/types";
@@ -59,6 +61,30 @@ export async function searchCountriesByName(
   } catch (error) {
     if (error instanceof ProviderApiError && error.status === 404) {
       return [];
+    }
+
+    throw error;
+  }
+}
+
+export async function getCountryByCode(code: string): Promise<Country | null> {
+  const normalizedCode = code.trim().toUpperCase();
+
+  if (!normalizedCode) {
+    return null;
+  }
+
+  try {
+    const countries = await restCountriesClient.get<RestCountryDto[]>(
+      `/alpha/${encodeURIComponent(normalizedCode)}`,
+    );
+
+    const [country] = countries;
+
+    return country ? mapRestCountryToCountry(country) : null;
+  } catch (error) {
+    if (error instanceof ProviderApiError && error.status === 404) {
+      return null;
     }
 
     throw error;
