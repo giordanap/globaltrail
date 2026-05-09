@@ -1,7 +1,25 @@
+import type { CountryRegion } from "@/modules/countries/types";
 import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
+import { cn } from "@/shared/utils/cn";
 
-const regions = ["Africa", "Americas", "Asia", "Europe", "Oceania"] as const;
+type CountryRegionFilter = CountryRegion | "All";
+
+type CountriesFiltersPanelProps = {
+  selectedRegion: CountryRegionFilter;
+  onRegionChange: (region: CountryRegionFilter) => void;
+  onClearFilters: () => void;
+};
+
+const regions: CountryRegionFilter[] = [
+  "All",
+  "Africa",
+  "Americas",
+  "Asia",
+  "Europe",
+  "Oceania",
+];
 
 const travelSignals = [
   "Weather ready",
@@ -10,7 +28,11 @@ const travelSignals = [
   "Saved plans",
 ] as const;
 
-export function CountriesFiltersPanel() {
+export function CountriesFiltersPanel({
+  selectedRegion,
+  onRegionChange,
+  onClearFilters,
+}: CountriesFiltersPanelProps) {
   return (
     <aside className="lg:sticky lg:top-24 lg:self-start">
       <Card className="p-6">
@@ -20,8 +42,8 @@ export function CountriesFiltersPanel() {
             Refine your atlas
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted-strong">
-            Search and advanced filters will become interactive in the next
-            Explore pass.
+            Filter destinations by region and combine it with search and
+            sorting.
           </p>
         </div>
 
@@ -29,20 +51,35 @@ export function CountriesFiltersPanel() {
           <h3 className="text-sm font-black text-foreground">Region</h3>
 
           <div className="mt-4 grid gap-3">
-            {regions.map((region) => (
-              <label
-                key={region}
-                className="flex items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 text-sm font-semibold text-muted-strong"
-              >
-                <span>{region}</span>
-                <input
-                  type="checkbox"
-                  disabled
-                  className="size-4 accent-deep-ocean"
-                  aria-label={`Filter by ${region}`}
-                />
-              </label>
-            ))}
+            {regions.map((region) => {
+              const isSelected = selectedRegion === region;
+
+              return (
+                <button
+                  key={region}
+                  type="button"
+                  onClick={() => onRegionChange(region)}
+                  className={cn(
+                    "flex items-center justify-between rounded-2xl border px-4 py-3 text-sm font-semibold transition",
+                    isSelected
+                      ? "border-deep-ocean/25 bg-mist-blue text-deep-ocean-strong"
+                      : "border-border bg-surface text-muted-strong hover:border-border-strong hover:text-foreground",
+                  )}
+                >
+                  <span>{region}</span>
+                  <span
+                    className={cn(
+                      "grid size-5 place-items-center rounded-full border text-[0.65rem]",
+                      isSelected
+                        ? "border-deep-ocean/30 bg-surface text-deep-ocean-strong"
+                        : "border-border text-muted",
+                    )}
+                  >
+                    {isSelected ? "✓" : ""}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -60,6 +97,15 @@ export function CountriesFiltersPanel() {
             ))}
           </div>
         </div>
+
+        <Button
+          type="button"
+          variant="secondary"
+          className="mt-8 w-full"
+          onClick={onClearFilters}
+        >
+          Reset filters
+        </Button>
       </Card>
     </aside>
   );

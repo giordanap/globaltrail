@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type {
+  CountrySortDirection,
+  CountrySortField,
+} from "@/modules/countries/types";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Select } from "@/shared/components/ui/select";
@@ -10,25 +14,46 @@ type CountriesToolbarProps = {
   visibleCount: number;
   query: string;
   isSearching: boolean;
+  sortBy: CountrySortField;
+  sortDirection: CountrySortDirection;
   recentSearches: string[];
   onQueryChange: (query: string) => void;
   onClearQuery: () => void;
   onSelectRecentSearch: (query: string) => void;
   onClearRecentSearches: () => void;
+  onSortChange: (
+    sortBy: CountrySortField,
+    sortDirection: CountrySortDirection,
+  ) => void;
 };
 
-const urlUpdateDelayMs = 500;
+const urlUpdateDelayMs = 1200;
+
+function parseSortValue(value: string): {
+  sortBy: CountrySortField;
+  sortDirection: CountrySortDirection;
+} {
+  const [sortBy, sortDirection] = value.split(":");
+
+  return {
+    sortBy: sortBy === "population" ? "population" : "name",
+    sortDirection: sortDirection === "desc" ? "desc" : "asc",
+  };
+}
 
 export function CountriesToolbar({
   totalCount,
   visibleCount,
   query,
   isSearching,
+  sortBy,
+  sortDirection,
   recentSearches,
   onQueryChange,
   onClearQuery,
   onSelectRecentSearch,
   onClearRecentSearches,
+  onSortChange,
 }: CountriesToolbarProps) {
   const [draftQuery, setDraftQuery] = useState(query);
   const updateTimeoutRef = useRef<number | null>(null);
@@ -74,6 +99,11 @@ export function CountriesToolbar({
     onSelectRecentSearch(nextQuery);
   }
 
+  function handleSortChange(value: string) {
+    const nextSort = parseSortValue(value);
+    onSortChange(nextSort.sortBy, nextSort.sortDirection);
+  }
+
   return (
     <div className="rounded-card border border-border bg-surface p-5 shadow-panel">
       <div className="grid gap-4 lg:grid-cols-[1fr_220px] lg:items-end">
@@ -81,20 +111,22 @@ export function CountriesToolbar({
           label="Search destinations"
           name="country-search"
           placeholder="Try Spain, Japan or Peru"
-          helperText="Search updates the URL, for example /countries?q=spain."
+          helperText="Search updates after you pause typing."
           value={draftQuery}
           onChange={(event) => handleQueryChange(event.target.value)}
         />
 
         <Select
           label="Sort by"
-          name="country-sort-preview"
-          defaultValue="name"
-          helperText="Sorting will become interactive soon."
-          disabled
+          name="country-sort"
+          value={`${sortBy}:${sortDirection}`}
+          helperText="Sorting updates the current results."
+          onChange={(event) => handleSortChange(event.target.value)}
         >
-          <option value="name">Name</option>
-          <option value="population">Population</option>
+          <option value="name:asc">Name A-Z</option>
+          <option value="name:desc">Name Z-A</option>
+          <option value="population:desc">Population high-low</option>
+          <option value="population:asc">Population low-high</option>
         </Select>
       </div>
 
@@ -112,7 +144,7 @@ export function CountriesToolbar({
           </Button>
         ) : (
           <p className="font-semibold text-muted-strong">
-            Live country data, search ready
+            Live country data, filters ready
           </p>
         )}
       </div>
