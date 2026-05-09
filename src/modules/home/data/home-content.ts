@@ -4,17 +4,17 @@ export const insightCards = [
   {
     icon: "◍",
     value: "250+ countries",
-    description: "Deep cultural and demographic data",
+    description: "Explore cultural, demographic and regional country signals.",
   },
   {
     icon: "☁",
-    value: "Weather forecast",
-    description: "Real-time Open-Meteo updates",
+    value: "Weather outlook",
+    description: "Read climate context before comparing your next destination.",
   },
   {
     icon: "▦",
-    value: "Local holidays",
-    description: "Sync with local cultural calendars",
+    value: "Local calendars",
+    description: "Plan around public holidays and seasonal travel moments.",
   },
 ] as const;
 
@@ -22,21 +22,29 @@ export const featuredDestinations = [
   {
     country: "Spain",
     region: "Europe",
+    description: "Mediterranean cities, cultural calendars and warm seasonal routes.",
+    signal: "Culture",
     image: withBasePath("/images/globaltrail/spain.webp"),
   },
   {
     country: "Japan",
     region: "Asia",
+    description: "Urban precision, seasonal landscapes and rich local traditions.",
+    signal: "Seasonal",
     image: withBasePath("/images/globaltrail/japan.webp"),
   },
   {
     country: "Peru",
     region: "South America",
+    description: "Andean routes, coastal cities and diverse regional climates.",
+    signal: "Adventure",
     image: withBasePath("/images/globaltrail/peru.webp"),
   },
   {
     country: "Iceland",
     region: "Europe",
+    description: "Nordic landscapes, dramatic weather and nature-led itineraries.",
+    signal: "Nature",
     image: withBasePath("/images/globaltrail/iceland.webp"),
   },
 ] as const;
@@ -46,18 +54,25 @@ export const howItWorksSteps = [
     icon: "⌕",
     title: "Search & Discover",
     description:
-      "Enter any country or city name to retrieve comprehensive localized data instantly.",
+      "Start with a destination and explore the essential country signals in a calm, readable view.",
   },
   {
     icon: "⇄",
-    title: "Side-by-side Compare",
+    title: "Compare with context",
     description:
-      "Juxtapose two destinations to evaluate costs, climates and upcoming public events.",
+      "Evaluate destinations side by side using travel-relevant signals like climate, currency and local calendars.",
   },
   {
     icon: "▦",
     title: "Plan & Save",
     description:
-      "Save your findings to local storage for a completely private, persistent trip planner.",
+      "Turn destination insights into saved ideas, private notes and lightweight travel plans.",
   },
+] as const;
+
+export const heroSignals = [
+  "Country insights",
+  "Weather outlook",
+  "Currency context",
+  "Local holidays",
 ] as const;
