@@ -3,7 +3,7 @@ import { Container } from "@/shared/components/ui/container";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-white/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border bg-surface/90 backdrop-blur-xl">
       <Container className="flex min-h-16 items-center justify-between">
         <a
           href="#top"
@@ -33,7 +33,7 @@ export function Header() {
 
         <a
           href="#destinations"
-          className="hidden size-10 place-items-center rounded-full border border-border bg-white text-foreground shadow-sm transition hover:border-foreground md:grid"
+          className="hidden size-10 place-items-center rounded-full border border-border bg-surface text-foreground shadow-sm transition hover:border-border-strong md:grid"
           aria-label="Search destinations"
         >
           <span className="text-lg leading-none">⌕</span>
@@ -41,7 +41,7 @@ export function Header() {
 
         <a
           href="#destinations"
-          className="grid size-10 place-items-center rounded-full border border-border bg-white text-foreground shadow-sm md:hidden"
+          className="grid size-10 place-items-center rounded-full border border-border bg-surface text-foreground shadow-sm md:hidden"
           aria-label="Open navigation"
         >
           <span className="text-lg leading-none">☰</span>

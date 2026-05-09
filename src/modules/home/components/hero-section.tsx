@@ -1,20 +1,19 @@
 import Image from "next/image";
 import { ButtonLink } from "@/shared/components/ui/button-link";
 import { Container } from "@/shared/components/ui/container";
+import { Eyebrow } from "@/shared/components/ui/eyebrow";
 import { insightCards } from "@/modules/home/data/home-content";
 import { withBasePath } from "@/core/router/base-path";
 
 export function HeroSection() {
   return (
-    <section id="top" className="bg-[#f3f6f8]">
+    <section id="top" className="bg-background">
       <Container className="py-20 lg:py-24">
         <div className="grid gap-16 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
           <div>
-            <p className="mb-7 w-fit rounded-full border border-[#dfe5eb] bg-white px-4 py-1.5 text-[0.68rem] font-black uppercase tracking-[0.22em] text-foreground shadow-sm">
-              ● Live travel insights
-            </p>
+            <Eyebrow className="mb-7">● Live travel insights</Eyebrow>
 
-            <h1 className="max-w-[520px] text-[clamp(3rem,5vw,5.2rem)] font-black leading-[0.92] tracking-[-0.06em] text-foreground">
+            <h1 className="travel-heading max-w-[560px] text-[clamp(3rem,5vw,5.2rem)] leading-[0.94] text-foreground">
               Plan smarter journeys with global travel insights.
             </h1>
 
@@ -34,8 +33,8 @@ export function HeroSection() {
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            <article className="w-full max-w-[590px] rounded-[1.9rem] bg-white p-6 shadow-[0_18px_44px_rgba(15,23,42,0.10)]">
-              <div className="relative h-[390px] overflow-hidden rounded-[1.35rem] bg-[#0b1220] sm:h-[420px] lg:h-[430px]">
+            <article className="travel-panel w-full max-w-[590px] p-6">
+              <div className="relative h-[470px] overflow-hidden rounded-card bg-ink sm:h-[510px] lg:h-[550px]">
                 <Image
                   src={withBasePath("/images/globaltrail/hero-globe.webp")}
                   alt="Abstract globe representing global travel insights"
@@ -51,11 +50,8 @@ export function HeroSection() {
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">
           {insightCards.map((card) => (
-            <article
-              key={card.value}
-              className="rounded-[1.2rem] bg-white p-7 shadow-sm"
-            >
-              <div className="grid size-10 place-items-center rounded-xl bg-[#f3f5f7] text-sm text-foreground">
+            <article key={card.value} className="travel-card p-7">
+              <div className="grid size-10 place-items-center rounded-xl bg-surface-soft text-sm text-foreground">
                 {card.icon}
               </div>
 

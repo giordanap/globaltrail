@@ -10,7 +10,7 @@ export function Eyebrow({ children, className }: EyebrowProps) {
   return (
     <p
       className={cn(
-        "w-fit rounded-full bg-sage px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-sage-strong",
+        "travel-label w-fit rounded-full border border-border bg-surface px-4 py-1.5 text-foreground shadow-sm",
         className,
       )}
     >

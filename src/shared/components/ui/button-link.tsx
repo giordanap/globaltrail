@@ -18,22 +18,20 @@ export function ButtonLink({
     <a
       href={href}
       className={cn(
-        "inline-flex min-h-12 min-w-44 items-center justify-center rounded-xl px-6 text-sm font-extrabold transition",
-        "focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-foreground/20",
+        "inline-flex min-h-12 min-w-44 items-center justify-center rounded-control px-6 text-sm font-extrabold transition",
+        "focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-deep-ocean/20",
         variant === "primary" &&
-          "bg-[#0b1220] !text-white shadow-sm hover:bg-[#172033]",
+          "bg-ink !text-white shadow-sm hover:bg-ink-soft",
         variant === "secondary" &&
-          "border border-[#d8dee6] bg-white text-[#111827] shadow-sm hover:border-[#111827]/30",
+          "border border-border bg-surface text-foreground shadow-sm hover:border-border-strong hover:bg-surface-soft",
         className,
       )}
-      style={variant === "primary" ? { color: "#ffffff" } : undefined}
     >
       <span
         className={cn(
           "leading-none",
           variant === "primary" ? "!text-white" : "text-current",
         )}
-        style={variant === "primary" ? { color: "#ffffff" } : undefined}
       >
         {children}
       </span>
