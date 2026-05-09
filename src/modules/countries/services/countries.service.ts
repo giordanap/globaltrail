@@ -1,4 +1,5 @@
 import { restCountriesClient } from "@/core/api/rest-countries/rest-countries.client";
+import { ProviderApiError } from "@/core/errors/provider-api-error";
 import {
   mapRestCountriesToCountrySummaries,
   sortCountrySummaries,
@@ -21,6 +22,10 @@ const countrySummaryFields = [
   "flags",
 ].join(",");
 
+function normalizeCountrySummaries(countries: RestCountryDto[]) {
+  return sortCountrySummaries(mapRestCountriesToCountrySummaries(countries));
+}
+
 export async function getCountries(): Promise<CountrySummary[]> {
   const countries = await restCountriesClient.get<RestCountryDto[]>("/all", {
     query: {
@@ -28,5 +33,34 @@ export async function getCountries(): Promise<CountrySummary[]> {
     },
   });
 
-  return sortCountrySummaries(mapRestCountriesToCountrySummaries(countries));
+  return normalizeCountrySummaries(countries);
+}
+
+export async function searchCountriesByName(
+  query: string,
+): Promise<CountrySummary[]> {
+  const normalizedQuery = query.trim();
+
+  if (!normalizedQuery) {
+    return [];
+  }
+
+  try {
+    const countries = await restCountriesClient.get<RestCountryDto[]>(
+      `/name/${encodeURIComponent(normalizedQuery)}`,
+      {
+        query: {
+          fields: countrySummaryFields,
+        },
+      },
+    );
+
+    return normalizeCountrySummaries(countries);
+  } catch (error) {
+    if (error instanceof ProviderApiError && error.status === 404) {
+      return [];
+    }
+
+    throw error;
+  }
 }

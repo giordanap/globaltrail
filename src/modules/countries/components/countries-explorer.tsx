@@ -8,11 +8,25 @@ import { Card } from "@/shared/components/ui/card";
 type CountriesExplorerProps = {
   countries: CountrySummary[];
   totalCount: number;
+  query: string;
+  isSearching: boolean;
+  recentSearches: string[];
+  onQueryChange: (query: string) => void;
+  onClearQuery: () => void;
+  onSelectRecentSearch: (query: string) => void;
+  onClearRecentSearches: () => void;
 };
 
 export function CountriesExplorer({
   countries,
   totalCount,
+  query,
+  isSearching,
+  recentSearches,
+  onQueryChange,
+  onClearQuery,
+  onSelectRecentSearch,
+  onClearRecentSearches,
 }: CountriesExplorerProps) {
   return (
     <div className="mt-10 grid gap-8 lg:grid-cols-[280px_1fr]">
@@ -20,8 +34,16 @@ export function CountriesExplorer({
 
       <div>
         <CountriesToolbar
+          key={query}
           totalCount={totalCount}
           visibleCount={countries.length}
+          query={query}
+          isSearching={isSearching}
+          recentSearches={recentSearches}
+          onQueryChange={onQueryChange}
+          onClearQuery={onClearQuery}
+          onSelectRecentSearch={onSelectRecentSearch}
+          onClearRecentSearches={onClearRecentSearches}
         />
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -32,10 +54,13 @@ export function CountriesExplorer({
 
         <Card className="mt-8 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <Badge variant="sage">Preview list</Badge>
+            <Badge variant={isSearching ? "ocean" : "sage"}>
+              {isSearching ? "Search results" : "Preview list"}
+            </Badge>
             <p className="mt-3 text-sm leading-6 text-muted-strong">
-              Pagination and URL-driven filtering will be added after this
-              layout pass.
+              {isSearching
+                ? "Search is connected to URL state and REST Countries by name."
+                : "Pagination and region filters will be added after this search pass."}
             </p>
           </div>
 
