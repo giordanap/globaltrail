@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BrandMark } from "@/shared/components/layout/brand-mark";
 import { footerNavigationGroups } from "@/shared/constants/navigation";
 import { Badge } from "@/shared/components/ui/badge";
@@ -30,18 +31,12 @@ export function Footer() {
                 <ul className="mt-4 space-y-3">
                   {group.links.map((link) => (
                     <li key={link.label}>
-                      {"href" in link ? (
-                        <a
-                          href={link.href}
-                          className="text-sm font-semibold text-muted-strong underline-offset-4 transition hover:text-foreground hover:underline"
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
-                        <span className="text-sm font-semibold text-muted-strong">
-                          {link.label}
-                        </span>
-                      )}
+                      <Link
+                        href={link.href}
+                        className="text-sm font-semibold text-muted-strong underline-offset-4 transition hover:text-foreground hover:underline"
+                      >
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>

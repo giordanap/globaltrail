@@ -1,29 +1,25 @@
+import { routes } from "@/core/router/routes";
+
 export const mainNavigationItems = [
   {
     label: "Home",
-    href: "#top",
-    isActive: true,
+    href: routes.home,
   },
   {
     label: "Explore",
-    href: "#destinations",
-    isActive: false,
+    href: routes.countries,
   },
   {
     label: "Compare",
-    href: "#compare",
-    isActive: false,
+    href: routes.compare,
   },
-] as const;
-
-export const upcomingNavigationItems = [
   {
     label: "Planner",
-    description: "Travel plans",
+    href: routes.planner,
   },
   {
     label: "Favorites",
-    description: "Saved destinations",
+    href: routes.favorites,
   },
 ] as const;
 
@@ -32,33 +28,16 @@ export const footerNavigationGroups = [
     title: "Explore",
     links: [
       {
-        label: "Featured destinations",
-        href: "#destinations",
+        label: "Countries",
+        href: routes.countries,
+      },
+      {
+        label: "Country insights",
+        href: routes.country,
       },
       {
         label: "Compare destinations",
-        href: "#compare",
-      },
-      {
-        label: "Back to top",
-        href: "#top",
-      },
-    ],
-  },
-  {
-    title: "Signals",
-    links: [
-      {
-        label: "Country insights",
-      },
-      {
-        label: "Weather",
-      },
-      {
-        label: "Currency",
-      },
-      {
-        label: "Holidays",
+        href: routes.compare,
       },
     ],
   },
@@ -67,12 +46,32 @@ export const footerNavigationGroups = [
     links: [
       {
         label: "Travel planner",
+        href: routes.planner,
       },
       {
         label: "Saved destinations",
+        href: routes.favorites,
       },
       {
-        label: "Local notes",
+        label: "Experience states",
+        href: routes.states,
+      },
+    ],
+  },
+  {
+    title: "Signals",
+    links: [
+      {
+        label: "Weather",
+        href: routes.country,
+      },
+      {
+        label: "Currency",
+        href: routes.country,
+      },
+      {
+        label: "Holidays",
+        href: routes.country,
       },
     ],
   },
