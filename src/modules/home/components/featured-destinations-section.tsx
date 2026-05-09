@@ -4,11 +4,11 @@ import { featuredDestinations } from "@/modules/home/data/home-content";
 
 export function FeaturedDestinationsSection() {
   return (
-    <section id="destinations" className="bg-[#f3f6f8] py-16">
+    <section id="destinations" className="bg-background py-16">
       <Container>
         <div className="flex items-end justify-between gap-8">
           <div>
-            <h2 className="text-4xl font-black tracking-[-0.055em] text-foreground">
+            <h2 className="travel-heading text-4xl text-foreground">
               Featured Destinations
             </h2>
             <p className="mt-3 max-w-sm text-sm leading-6 text-muted-strong">
@@ -29,7 +29,7 @@ export function FeaturedDestinationsSection() {
           {featuredDestinations.map((destination) => (
             <article
               key={destination.country}
-              className="group relative h-[310px] overflow-hidden rounded-[1.35rem] bg-foreground shadow-sm md:h-[330px] lg:h-[350px]"
+              className="group relative h-[310px] overflow-hidden rounded-card bg-ink shadow-sm md:h-[330px] lg:h-[350px]"
             >
               <Image
                 src={destination.image}
@@ -42,7 +42,7 @@ export function FeaturedDestinationsSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/18 to-transparent" />
 
               <div className="absolute bottom-5 left-5 right-5 text-white">
-                <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-white/78">
+                <p className="travel-label text-white/78">
                   {destination.region}
                 </p>
                 <h3 className="mt-2 text-xl font-black tracking-[-0.035em]">

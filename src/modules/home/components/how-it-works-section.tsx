@@ -3,10 +3,10 @@ import { howItWorksSteps } from "@/modules/home/data/home-content";
 
 export function HowItWorksSection() {
   return (
-    <section id="compare" className="bg-[#eaf0f4] py-20">
+    <section id="compare" className="bg-surface-muted py-20">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-4xl font-black tracking-[-0.055em] text-foreground">
+          <h2 className="travel-heading text-4xl text-foreground">
             How it works
           </h2>
           <p className="mt-5 text-sm leading-7 text-muted-strong">
@@ -19,7 +19,7 @@ export function HowItWorksSection() {
         <div className="mt-14 grid gap-10 md:grid-cols-3">
           {howItWorksSteps.map((step) => (
             <article key={step.title} className="text-center">
-              <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-white text-xl shadow-sm">
+              <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-surface text-xl shadow-sm">
                 {step.icon}
               </div>
               <h3 className="mt-6 text-lg font-black text-foreground">
