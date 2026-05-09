@@ -3,12 +3,34 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/core/query/query-keys";
 import { queryStaleTimes } from "@/core/query/query-stale-times";
-import { getCountries } from "@/modules/countries/services/countries.service";
+import {
+  getCountries,
+  searchCountriesByName,
+} from "@/modules/countries/services/countries.service";
 
-export function useCountriesQuery() {
+type UseCountriesQueryOptions = {
+  enabled?: boolean;
+};
+
+export function useCountriesQuery(options: UseCountriesQueryOptions = {}) {
   return useQuery({
     queryKey: queryKeys.countries.list(),
     queryFn: getCountries,
     staleTime: queryStaleTimes.countriesList,
+    enabled: options.enabled ?? true,
+  });
+}
+
+export function useCountrySearchQuery(
+  query: string,
+  options: UseCountriesQueryOptions = {},
+) {
+  const normalizedQuery = query.trim();
+
+  return useQuery({
+    queryKey: queryKeys.countries.search(normalizedQuery),
+    queryFn: () => searchCountriesByName(normalizedQuery),
+    staleTime: queryStaleTimes.countriesList,
+    enabled: Boolean(normalizedQuery) && (options.enabled ?? true),
   });
 }
