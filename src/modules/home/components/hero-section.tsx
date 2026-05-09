@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ButtonLink } from "@/shared/components/ui/button-link";
 import { Container } from "@/shared/components/ui/container";
 import { Eyebrow } from "@/shared/components/ui/eyebrow";
+import { StatCard } from "@/shared/components/ui/stat-card";
 import { insightCards } from "@/modules/home/data/home-content";
 import { withBasePath } from "@/core/router/base-path";
 
@@ -50,19 +51,12 @@ export function HeroSection() {
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">
           {insightCards.map((card) => (
-            <article key={card.value} className="travel-card p-7">
-              <div className="grid size-10 place-items-center rounded-xl bg-surface-soft text-sm text-foreground">
-                {card.icon}
-              </div>
-
-              <h2 className="mt-5 text-[2rem] font-black leading-none tracking-[-0.05em] text-foreground">
-                {card.value}
-              </h2>
-
-              <p className="mt-2 text-sm leading-6 text-muted-strong">
-                {card.description}
-              </p>
-            </article>
+            <StatCard
+              key={card.value}
+              icon={card.icon}
+              value={card.value}
+              description={card.description}
+            />
           ))}
         </div>
       </Container>
