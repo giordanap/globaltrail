@@ -7,6 +7,7 @@ import {
 } from "@/modules/countries/hooks/use-countries-query";
 import { useCountrySearchParams } from "@/modules/countries/hooks/use-country-search-params";
 import { useRecentCountrySearches } from "@/modules/countries/hooks/use-recent-country-searches";
+import { sortCountrySummaries } from "@/modules/countries/mappers";
 import { CountriesExplorer } from "@/modules/countries/components/countries-explorer";
 import { CountriesGridSkeleton } from "@/modules/countries/components/countries-grid-skeleton";
 import { EmptyState } from "@/shared/components/feedback/empty-state";
@@ -20,15 +21,23 @@ import { SectionHeader } from "@/shared/components/ui/section-header";
 const visibleCountriesLimit = 48;
 
 export function CountriesPage() {
-  const { query, setQuery, clearQuery } = useCountrySearchParams();
+  const {
+    query,
+    region,
+    sortBy,
+    sortDirection,
+    setQuery,
+    clearQuery,
+    setRegion,
+    setSort,
+    clearFilters,
+  } = useCountrySearchParams();
+
   const normalizedQuery = query.trim();
   const isSearching = normalizedQuery.length > 0;
 
-  const {
-    recentSearches,
-    addRecentSearch,
-    clearRecentSearches,
-  } = useRecentCountrySearches();
+  const { recentSearches, addRecentSearch, clearRecentSearches } =
+    useRecentCountrySearches();
 
   const countriesQuery = useCountriesQuery({
     enabled: !isSearching,
@@ -40,9 +49,19 @@ export function CountriesPage() {
 
   const activeQuery = isSearching ? countrySearchQuery : countriesQuery;
 
+  const filteredCountries = useMemo(() => {
+    const countries = activeQuery.data ?? [];
+    const regionFilteredCountries =
+      region === "All"
+        ? countries
+        : countries.filter((country) => country.region === region);
+
+    return sortCountrySummaries(regionFilteredCountries, sortBy, sortDirection);
+  }, [activeQuery.data, region, sortBy, sortDirection]);
+
   const visibleCountries = useMemo(
-    () => activeQuery.data?.slice(0, visibleCountriesLimit) ?? [],
-    [activeQuery.data],
+    () => filteredCountries.slice(0, visibleCountriesLimit),
+    [filteredCountries],
   );
 
   useEffect(() => {
@@ -69,8 +88,10 @@ export function CountriesPage() {
             title="Explore countries with calm, useful travel context."
             description="Browse real destination data with country facts, flags, capitals, regions, population, currencies and languages."
             action={
-              <Badge variant={isSearching ? "sage" : "ocean"}>
-                {isSearching ? "Search active" : "Live country data"}
+              <Badge variant={isSearching || region !== "All" ? "sage" : "ocean"}>
+                {isSearching || region !== "All"
+                  ? "Filters active"
+                  : "Live country data"}
               </Badge>
             }
           />
@@ -125,10 +146,10 @@ export function CountriesPage() {
               <EmptyState
                 icon="⌕"
                 title="No countries found."
-                description={`We could not find a destination matching “${normalizedQuery}”. Try another country name or clear your search.`}
+                description="No destinations match the current search and region filters. Try another country name or reset the filters."
                 action={
-                  <Button onClick={clearQuery} variant="secondary">
-                    Clear search
+                  <Button onClick={clearFilters} variant="secondary">
+                    Reset filters
                   </Button>
                 }
               />
@@ -138,14 +159,20 @@ export function CountriesPage() {
           {activeQuery.isSuccess && visibleCountries.length > 0 ? (
             <CountriesExplorer
               countries={visibleCountries}
-              totalCount={activeQuery.data.length}
+              totalCount={filteredCountries.length}
               query={query}
+              region={region}
+              sortBy={sortBy}
+              sortDirection={sortDirection}
               isSearching={isSearching}
               recentSearches={recentSearches}
               onQueryChange={setQuery}
               onClearQuery={clearQuery}
               onSelectRecentSearch={setQuery}
               onClearRecentSearches={clearRecentSearches}
+              onRegionChange={setRegion}
+              onSortChange={setSort}
+              onClearFilters={clearFilters}
             />
           ) : null}
         </Container>
