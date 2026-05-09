@@ -2,8 +2,8 @@
 
 import { useMemo } from "react";
 import { useCountriesQuery } from "@/modules/countries/hooks/use-countries-query";
+import { CountriesExplorer } from "@/modules/countries/components/countries-explorer";
 import { CountriesGridSkeleton } from "@/modules/countries/components/countries-grid-skeleton";
-import { CountrySummaryCard } from "@/modules/countries/components/country-summary-card";
 import { ErrorState } from "@/shared/components/feedback/error-state";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
@@ -33,8 +33,22 @@ export function CountriesPage() {
           />
 
           {countriesQuery.isLoading ? (
-            <div className="mt-10">
-              <CountriesGridSkeleton />
+            <div className="mt-10 grid gap-8 lg:grid-cols-[280px_1fr]">
+              <Card className="hidden p-6 lg:block">
+                <div className="h-7 w-28 rounded-full bg-surface-muted" />
+                <div className="mt-8 space-y-3">
+                  <div className="h-12 rounded-2xl bg-surface-muted" />
+                  <div className="h-12 rounded-2xl bg-surface-muted" />
+                  <div className="h-12 rounded-2xl bg-surface-muted" />
+                </div>
+              </Card>
+
+              <div>
+                <Card className="mb-6 p-5">
+                  <div className="h-12 rounded-2xl bg-surface-muted" />
+                </Card>
+                <CountriesGridSkeleton />
+              </div>
             </div>
           ) : null}
 
@@ -56,45 +70,10 @@ export function CountriesPage() {
           ) : null}
 
           {countriesQuery.isSuccess ? (
-            <>
-              <div className="mt-10 grid gap-5 md:grid-cols-3">
-                <Card className="p-5">
-                  <p className="travel-label text-muted">Countries</p>
-                  <p className="mt-3 text-3xl font-black tracking-[-0.05em] text-foreground">
-                    {countriesQuery.data.length}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-muted-strong">
-                    Destinations available for exploration.
-                  </p>
-                </Card>
-
-                <Card className="p-5">
-                  <p className="travel-label text-muted">Preview</p>
-                  <p className="mt-3 text-3xl font-black tracking-[-0.05em] text-foreground">
-                    {visibleCountries.length}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-muted-strong">
-                    Countries shown in this first data view.
-                  </p>
-                </Card>
-
-                <Card className="p-5">
-                  <p className="travel-label text-muted">Next</p>
-                  <p className="mt-3 text-3xl font-black tracking-[-0.05em] text-foreground">
-                    Search
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-muted-strong">
-                    Filters and URL state will be added in the next Explore pass.
-                  </p>
-                </Card>
-              </div>
-
-              <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {visibleCountries.map((country) => (
-                  <CountrySummaryCard key={country.alpha3Code} country={country} />
-                ))}
-              </div>
-            </>
+            <CountriesExplorer
+              countries={visibleCountries}
+              totalCount={countriesQuery.data.length}
+            />
           ) : null}
         </Container>
       </section>
