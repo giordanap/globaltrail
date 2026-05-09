@@ -1,29 +1,24 @@
 import Image from "next/image";
 import { Container } from "@/shared/components/ui/container";
+import { SectionHeader } from "@/shared/components/ui/section-header";
 import { featuredDestinations } from "@/modules/home/data/home-content";
 
 export function FeaturedDestinationsSection() {
   return (
     <section id="destinations" className="bg-background py-16">
       <Container>
-        <div className="flex items-end justify-between gap-8">
-          <div>
-            <h2 className="travel-heading text-4xl text-foreground">
-              Featured Destinations
-            </h2>
-            <p className="mt-3 max-w-sm text-sm leading-6 text-muted-strong">
-              Our curated selection of sought-after travel insights for the
-              current season.
-            </p>
-          </div>
-
-          <a
-            href="#top"
-            className="hidden text-sm font-black text-foreground md:inline-flex"
-          >
-            View all →
-          </a>
-        </div>
+        <SectionHeader
+          title="Featured Destinations"
+          description="Our curated selection of sought-after travel insights for the current season."
+          action={
+            <a
+              href="#top"
+              className="hidden text-sm font-black text-foreground md:inline-flex"
+            >
+              View all →
+            </a>
+          }
+        />
 
         <div className="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-4">
           {featuredDestinations.map((destination) => (
