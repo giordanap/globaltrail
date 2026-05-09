@@ -1,3 +1,4 @@
+import { Badge } from "@/shared/components/ui/badge";
 import { Card } from "@/shared/components/ui/card";
 import { Container } from "@/shared/components/ui/container";
 import { SectionHeader } from "@/shared/components/ui/section-header";
@@ -9,22 +10,44 @@ export function HowItWorksSection() {
       <Container>
         <SectionHeader
           align="center"
+          eyebrow="Travel flow"
           title="How it works"
-          description="GlobalTrail aggregates destination signals to provide accurate, real-time travel intelligence without adding complexity to your planning flow."
+          description="GlobalTrail turns scattered destination signals into a simple flow for discovery, comparison and planning."
         />
 
-        <div className="mt-14 grid gap-10 md:grid-cols-3">
-          {howItWorksSteps.map((step) => (
-            <Card key={step.title} className="p-7 text-center shadow-sm">
-              <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-surface-soft text-xl">
-                {step.icon}
+        <div className="mt-14 grid gap-7 md:grid-cols-3">
+          {howItWorksSteps.map((step, index) => (
+            <Card
+              key={step.title}
+              className="relative overflow-hidden border border-white/70 p-8 text-center shadow-sm"
+            >
+              <div className="absolute right-5 top-5 text-5xl font-black leading-none text-surface-muted">
+                0{index + 1}
               </div>
-              <h3 className="mt-6 text-lg font-black text-foreground">
-                {step.title}
-              </h3>
-              <p className="mx-auto mt-4 max-w-xs text-sm leading-7 text-muted-strong">
-                {step.description}
-              </p>
+
+              <div className="relative">
+                <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-surface-soft text-xl">
+                  {step.icon}
+                </div>
+
+                <h3 className="mt-6 text-lg font-black text-foreground">
+                  {step.title}
+                </h3>
+
+                <p className="mx-auto mt-4 max-w-xs text-sm leading-7 text-muted-strong">
+                  {step.description}
+                </p>
+
+                <div className="mt-6 flex justify-center">
+                  <Badge
+                    variant={
+                      index === 0 ? "ocean" : index === 1 ? "sage" : "sand"
+                    }
+                  >
+                    Step {index + 1}
+                  </Badge>
+                </div>
+              </div>
             </Card>
           ))}
         </div>
