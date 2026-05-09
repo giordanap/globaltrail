@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Geist_Mono, Manrope } from "next/font/google";
-import { Footer } from "@/shared/components/layout/footer";
-import { Header } from "@/shared/components/layout/header";
+import { AppShell } from "@/shared/components/layout/app-shell";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -36,11 +35,7 @@ export default function RootLayout({
       lang="en"
       className={`${manrope.variable} ${fraunces.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="min-h-full bg-background text-foreground">
-        <Header />
-        {children}
-        <Footer />
-      </body>
+      <AppShell>{children}</AppShell>
     </html>
   );
 }
