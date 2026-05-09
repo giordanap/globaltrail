@@ -1,49 +1,65 @@
+import { BrandMark } from "@/shared/components/layout/brand-mark";
+import { footerNavigationGroups } from "@/shared/constants/navigation";
+import { Badge } from "@/shared/components/ui/badge";
 import { Container } from "@/shared/components/ui/container";
-
-const footerLinks = ["Explore", "Compare", "Planner", "Favorites"];
-
-const destinationSignals = [
-  "Country insights",
-  "Weather",
-  "Currency",
-  "Holidays",
-];
 
 export function Footer() {
   return (
-    <footer className="bg-surface">
-      <Container className="flex flex-col gap-8 py-10 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-xl font-black tracking-tight text-foreground">
-            GlobalTrail
-          </p>
-          <p className="mt-2 max-w-[150px] text-xs leading-5 text-muted-strong">
-            Global travel intelligence
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-x-10 gap-y-4">
+    <footer className="border-t border-border bg-surface">
+      <Container className="py-12">
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_1.6fr] lg:items-start">
           <div>
-            <p className="travel-label text-muted">Signals</p>
+            <BrandMark />
+
+            <p className="mt-5 max-w-sm text-sm leading-7 text-muted-strong">
+              Calm destination intelligence for exploring countries, comparing
+              travel signals and planning more confident journeys.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Badge variant="sage">Country insights</Badge>
+              <Badge variant="sand">Travel planning</Badge>
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-x-7 gap-y-3 text-xs uppercase tracking-[0.18em] text-muted-strong">
-            {destinationSignals.map((signal) => (
-              <span key={signal}>{signal}</span>
+          <div className="grid gap-8 sm:grid-cols-3">
+            {footerNavigationGroups.map((group) => (
+              <div key={group.title}>
+                <h2 className="travel-label text-muted">{group.title}</h2>
+
+                <ul className="mt-4 space-y-3">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      {"href" in link ? (
+                        <a
+                          href={link.href}
+                          className="text-sm font-semibold text-muted-strong underline-offset-4 transition hover:text-foreground hover:underline"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <span className="text-sm font-semibold text-muted-strong">
+                          {link.label}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
         </div>
 
-        <nav
-          aria-label="Footer navigation"
-          className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-strong"
-        >
-          {footerLinks.map((link) => (
-            <a key={link} href="#top" className="underline-offset-4 hover:underline">
-              {link}
-            </a>
-          ))}
-        </nav>
+        <div className="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted-strong md:flex-row md:items-center md:justify-between">
+          <p>© 2026 GlobalTrail. Built for smarter travel decisions.</p>
+
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <span>Explore</span>
+            <span>Compare</span>
+            <span>Planner</span>
+            <span>Favorites</span>
+          </div>
+        </div>
       </Container>
     </footer>
   );
