@@ -3,9 +3,9 @@
 import type { CountryCoordinates } from "@/modules/countries/types";
 import { useWeatherForecastQuery } from "@/modules/weather/hooks/use-weather-query";
 import type { WeatherForecast } from "@/modules/weather/types";
+import { PartialApiState } from "@/shared/components/feedback/partial-api-state";
 import { SkeletonBlock } from "@/shared/components/feedback/skeleton-block";
 import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 
 type WeatherPanelProps = {
@@ -74,12 +74,13 @@ function WeatherContent({ forecast }: { forecast: WeatherForecast }) {
 
   if (!current) {
     return (
-      <Card className="p-6">
-        <Badge variant="sand">Weather unavailable</Badge>
-        <p className="mt-4 text-sm leading-7 text-muted-strong">
-          Current weather data is not available for this destination.
-        </p>
-      </Card>
+      <PartialApiState
+        eyebrow="Weather unavailable"
+        title="Current weather is not available."
+        description="This destination loaded correctly, but the weather signal does not include current conditions right now."
+        icon="☁"
+        tone="soft"
+      />
     );
   }
 
@@ -130,7 +131,7 @@ function WeatherContent({ forecast }: { forecast: WeatherForecast }) {
       <div className="border-t border-border p-6">
         <div className="flex items-center justify-between gap-4">
           <p className="travel-label text-muted">5-day forecast</p>
-          <Badge variant="ocean">Open-Meteo</Badge>
+          <Badge variant="ocean">Weather signal</Badge>
         </div>
 
         <div className="mt-5 grid gap-3">
@@ -182,16 +183,13 @@ export function WeatherPanel({ coordinates }: WeatherPanelProps) {
 
   if (!coordinates) {
     return (
-      <Card className="p-6">
-        <Badge variant="sand">Weather unavailable</Badge>
-        <h2 className="mt-5 text-xl font-black tracking-[-0.03em] text-foreground">
-          Coordinates are missing.
-        </h2>
-        <p className="mt-3 text-sm leading-7 text-muted-strong">
-          This destination does not include coordinates, so the weather outlook
-          cannot be loaded yet.
-        </p>
-      </Card>
+      <PartialApiState
+        eyebrow="Weather unavailable"
+        title="Coordinates are missing."
+        description="This destination does not include coordinates, so the weather outlook cannot be loaded yet."
+        icon="◍"
+        tone="soft"
+      />
     );
   }
 
@@ -201,28 +199,28 @@ export function WeatherPanel({ coordinates }: WeatherPanelProps) {
 
   if (weatherQuery.isError) {
     return (
-      <Card className="p-6">
-        <Badge variant="terracotta">Weather unavailable</Badge>
-        <h2 className="mt-5 text-xl font-black tracking-[-0.03em] text-foreground">
-          We could not load the weather outlook.
-        </h2>
-        <p className="mt-3 text-sm leading-7 text-muted-strong">
-          The weather signal is temporarily unavailable. The rest of the
-          destination insight remains available.
-        </p>
-        <Button
-          className="mt-6"
-          onClick={() => void weatherQuery.refetch()}
-          disabled={weatherQuery.isRefetching}
-        >
-          {weatherQuery.isRefetching ? "Retrying..." : "Try again"}
-        </Button>
-      </Card>
+      <PartialApiState
+        eyebrow="Weather unavailable"
+        title="We could not load the weather outlook."
+        description="The weather signal is temporarily unavailable. The rest of the destination insight remains available."
+        icon="☁"
+        tone="error"
+        onRetry={() => void weatherQuery.refetch()}
+        isRetrying={weatherQuery.isRefetching}
+      />
     );
   }
 
   if (!weatherQuery.data) {
-    return null;
+    return (
+      <PartialApiState
+        eyebrow="Weather unavailable"
+        title="Weather details are not ready."
+        description="The destination loaded correctly, but weather details are not available right now."
+        icon="☁"
+        tone="soft"
+      />
+    );
   }
 
   return <WeatherContent forecast={weatherQuery.data} />;

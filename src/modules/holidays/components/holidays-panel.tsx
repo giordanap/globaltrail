@@ -9,9 +9,9 @@ import type {
   LongWeekend,
   PublicHoliday,
 } from "@/modules/holidays/types";
+import { PartialApiState } from "@/shared/components/feedback/partial-api-state";
 import { SkeletonBlock } from "@/shared/components/feedback/skeleton-block";
 import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 
 type HolidaysPanelProps = {
@@ -140,23 +140,15 @@ export function HolidaysPanel({
 
   if (holidaysQuery.isError) {
     return (
-      <Card className="p-6">
-        <Badge variant="terracotta">Holidays unavailable</Badge>
-        <h2 className="mt-5 text-xl font-black tracking-[-0.03em] text-foreground">
-          We could not load local holidays.
-        </h2>
-        <p className="mt-3 text-sm leading-7 text-muted-strong">
-          The holiday calendar is temporarily unavailable. The rest of the
-          destination insight remains available.
-        </p>
-        <Button
-          className="mt-6"
-          onClick={() => void holidaysQuery.refetch()}
-          disabled={holidaysQuery.isRefetching}
-        >
-          {holidaysQuery.isRefetching ? "Retrying..." : "Try again"}
-        </Button>
-      </Card>
+      <PartialApiState
+        eyebrow="Holidays unavailable"
+        title="We could not load local holidays."
+        description="The holiday calendar is temporarily unavailable. The rest of the destination insight remains available."
+        icon="✦"
+        tone="error"
+        onRetry={() => void holidaysQuery.refetch()}
+        isRetrying={holidaysQuery.isRefetching}
+      />
     );
   }
 
@@ -174,8 +166,24 @@ export function HolidaysPanel({
             </p>
           </div>
 
-          <Badge variant="sand">Nager.Date</Badge>
+          <Badge variant={longWeekendsQuery.isError ? "sand" : "sand"}>
+            Holiday signal
+          </Badge>
         </div>
+
+        {longWeekendsQuery.isError ? (
+          <PartialApiState
+            className="mt-6"
+            surface="inline"
+            eyebrow="Long weekends unavailable"
+            title="Long weekend data could not be refreshed."
+            description="Public holidays remain available, but long weekend suggestions are temporarily unavailable."
+            icon="↗"
+            tone="soft"
+            onRetry={() => void longWeekendsQuery.refetch()}
+            isRetrying={longWeekendsQuery.isRefetching}
+          />
+        ) : null}
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-border bg-surface px-4 py-3">
@@ -192,7 +200,9 @@ export function HolidaysPanel({
               Long weekends
             </p>
             <p className="mt-2 text-2xl font-black tracking-[-0.05em] text-foreground">
-              {longWeekendsQuery.data?.length ?? 0}
+              {longWeekendsQuery.isError
+                ? "N/A"
+                : (longWeekendsQuery.data?.length ?? 0)}
             </p>
           </div>
 
@@ -223,9 +233,15 @@ export function HolidaysPanel({
             ))}
           </div>
         ) : (
-          <p className="mt-5 text-sm leading-7 text-muted-strong">
-            No public holidays were found for this destination.
-          </p>
+          <PartialApiState
+            className="mt-5"
+            surface="inline"
+            eyebrow="No holidays found"
+            title="No public holidays were found."
+            description="The destination loaded correctly, but the calendar does not include public holidays for this year."
+            icon="○"
+            tone="soft"
+          />
         )}
       </div>
 
@@ -235,14 +251,26 @@ export function HolidaysPanel({
           {longWeekendsQuery.isFetching ? (
             <Badge variant="neutral">Updating</Badge>
           ) : (
-            <Badge variant="sage">{visibleLongWeekends.length} shown</Badge>
+            <Badge variant={longWeekendsQuery.isError ? "sand" : "sage"}>
+              {longWeekendsQuery.isError
+                ? "Unavailable"
+                : `${visibleLongWeekends.length} shown`}
+            </Badge>
           )}
         </div>
 
         {longWeekendsQuery.isError ? (
-          <p className="mt-5 text-sm leading-7 text-muted-strong">
-            Long weekend data is unavailable for this destination right now.
-          </p>
+          <PartialApiState
+            className="mt-5"
+            surface="inline"
+            eyebrow="Long weekends unavailable"
+            title="Suggestions are not available right now."
+            description="Holiday data remains visible, but long weekend suggestions could not be loaded."
+            icon="↗"
+            tone="soft"
+            onRetry={() => void longWeekendsQuery.refetch()}
+            isRetrying={longWeekendsQuery.isRefetching}
+          />
         ) : visibleLongWeekends.length > 0 ? (
           <div className="mt-5 grid gap-3">
             {visibleLongWeekends.map((weekend) => (
@@ -253,9 +281,15 @@ export function HolidaysPanel({
             ))}
           </div>
         ) : (
-          <p className="mt-5 text-sm leading-7 text-muted-strong">
-            No long weekends were found for this destination.
-          </p>
+          <PartialApiState
+            className="mt-5"
+            surface="inline"
+            eyebrow="No long weekends found"
+            title="No long weekends were found."
+            description="The destination calendar loaded correctly, but no long weekend suggestions are available for this year."
+            icon="○"
+            tone="soft"
+          />
         )}
       </div>
     </Card>
