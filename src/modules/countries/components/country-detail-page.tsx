@@ -8,6 +8,7 @@ import { CountryDetailSkeleton } from "@/modules/countries/components/country-de
 import { CurrencyConverterPanel } from "@/modules/currency/components/currency-converter-panel";
 import { EmptyState } from "@/shared/components/feedback/empty-state";
 import { ErrorState } from "@/shared/components/feedback/error-state";
+import { HolidaysPanel } from "@/modules/holidays/components/holidays-panel";
 import { routes } from "@/core/router/routes";
 import { useCountryDetailQuery } from "@/modules/countries/hooks/use-countries-query";
 import { useSearchParams } from "next/navigation";
@@ -307,8 +308,13 @@ export function CountryDetailPage() {
               </Card>
 
               <CurrencyConverterPanel currencies={country.currencies} />
-              
+
               <WeatherPanel coordinates={country.coordinates} />
+
+              <HolidaysPanel
+                countryCode={country.alpha2Code}
+                countryName={country.name}
+              />
 
               <Card className="p-6">
                 <p className="travel-label text-muted">Geography</p>
