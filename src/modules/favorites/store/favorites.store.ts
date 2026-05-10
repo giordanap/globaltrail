@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { storageKeys } from "@/core/storage/storage-keys";
 import type { FavoriteDestination } from "@/modules/favorites/types/favorite-destination";
 
 type FavoritesState = {
@@ -86,7 +87,7 @@ export const useFavoritesStore = create<FavoritesState>()(
       },
     }),
     {
-      name: "globaltrail-favorites-v1",
+      name: storageKeys.favorites,
       storage: createJSONStorage(() => window.localStorage),
       partialize: (state) => ({
         favorites: state.favorites,
