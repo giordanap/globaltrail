@@ -3,77 +3,20 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { routes } from "@/core/router/routes";
+import { CompareCountryPanel } from "@/modules/compare/components/compare-country-panel";
+import { CompareMetricRow } from "@/modules/compare/components/compare-metric-row";
 import { useCompareSearchParams } from "@/modules/compare/hooks/use-compare-search-params";
 import { useCompareStore } from "@/modules/compare/store";
 import { getCompareSelectionCount } from "@/modules/compare/types";
+import { useCountryDetailQuery } from "@/modules/countries/hooks/use-countries-query";
+import type { Country } from "@/modules/countries/types";
+import { useWeatherForecastQuery } from "@/modules/weather/hooks/use-weather-query";
+import type { WeatherForecast } from "@/modules/weather/types";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 import { Container } from "@/shared/components/ui/container";
 import { SectionHeader } from "@/shared/components/ui/section-header";
-
-type CompareSlotCardProps = {
-  side: "Left" | "Right";
-  code: string | null;
-};
-
-function CompareSlotCard({ side, code }: CompareSlotCardProps) {
-  return (
-    <Card className="overflow-hidden p-0">
-      <div className="relative min-h-56 overflow-hidden bg-ink p-6 text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(219,234,242,0.5),_transparent_18rem),linear-gradient(135deg,_rgba(11,18,32,0.98),_rgba(11,79,117,0.72))]" />
-
-        <div className="relative flex min-h-44 flex-col justify-between">
-          <Badge
-            variant="neutral"
-            className="w-fit border-white/20 bg-white/15 text-white backdrop-blur-md"
-          >
-            {side} destination
-          </Badge>
-
-          <div>
-            <h2 className="text-5xl font-black tracking-[-0.08em]">
-              {code ?? "Open"}
-            </h2>
-
-            <p className="mt-3 text-sm leading-7 text-white/75">
-              {code
-                ? "Ready to load country data in the full comparison view."
-                : "Choose a destination from Explore or Country Detail."}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="p-5">
-        {code ? (
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Link
-              href={routes.countryDetail(code)}
-              className="inline-flex min-h-11 items-center justify-center rounded-control bg-ink px-4 text-sm font-extrabold !text-white shadow-sm transition hover:bg-ink-soft"
-            >
-              View country
-            </Link>
-
-            <Link
-              href={routes.plannerDestination(code)}
-              className="inline-flex min-h-11 items-center justify-center rounded-control border border-border bg-surface px-4 text-sm font-extrabold text-foreground shadow-sm transition hover:border-border-strong hover:bg-surface-soft"
-            >
-              Add to planner
-            </Link>
-          </div>
-        ) : (
-          <Link
-            href={routes.countries}
-            className="inline-flex min-h-11 items-center justify-center rounded-control border border-border bg-surface px-4 text-sm font-extrabold text-foreground shadow-sm transition hover:border-border-strong hover:bg-surface-soft"
-          >
-            Choose destination
-          </Link>
-        )}
-      </div>
-    </Card>
-  );
-}
 
 function getCompareStatusLabel(selectionCount: number) {
   if (selectionCount === 0) {
@@ -87,6 +30,127 @@ function getCompareStatusLabel(selectionCount: number) {
   return "Ready to compare";
 }
 
+function formatPopulation(country: Country | null | undefined) {
+  if (!country?.population) {
+    return "Unavailable";
+  }
+
+  return country.population.toLocaleString("en");
+}
+
+function getCapital(country: Country | null | undefined) {
+  return country?.capital ?? "Unavailable";
+}
+
+function getRegion(country: Country | null | undefined) {
+  if (!country) {
+    return "Unavailable";
+  }
+
+  return country.subregion
+    ? `${country.region} · ${country.subregion}`
+    : country.region;
+}
+
+function getCurrency(country: Country | null | undefined) {
+  if (!country || country.currencies.length === 0) {
+    return "Unavailable";
+  }
+
+  return country.currencies
+    .map((currency) =>
+      currency.symbol
+        ? `${currency.code} · ${currency.symbol}`
+        : currency.code,
+    )
+    .join(", ");
+}
+
+function getLanguages(country: Country | null | undefined) {
+  if (!country || country.languages.length === 0) {
+    return "Unavailable";
+  }
+
+  return country.languages
+    .slice(0, 3)
+    .map((language) => language.name)
+    .join(", ");
+}
+
+function getArea(country: Country | null | undefined) {
+  if (!country?.area) {
+    return "Unavailable";
+  }
+
+  return `${country.area.toLocaleString("en")} km²`;
+}
+
+function getTimezones(country: Country | null | undefined) {
+  if (!country || country.timezones.length === 0) {
+    return "Unavailable";
+  }
+
+  return country.timezones.slice(0, 3).join(", ");
+}
+
+function getTravelContext(country: Country | null | undefined) {
+  if (!country) {
+    return "Unavailable";
+  }
+
+  const signals = [
+    country.landlocked ? "Landlocked" : "Coastal access possible",
+    country.carSide ? `Drives ${country.carSide}` : null,
+    country.startOfWeek ? `Week starts ${country.startOfWeek}` : null,
+  ].filter(Boolean);
+
+  return signals.length > 0 ? signals.join(" · ") : "Unavailable";
+}
+
+function getWeatherLabel(
+  forecast: WeatherForecast | null | undefined,
+  isLoading: boolean,
+  isError: boolean,
+) {
+  if (isLoading) {
+    return "Loading";
+  }
+
+  if (isError) {
+    return "Weather unavailable";
+  }
+
+  const currentWeather = forecast?.current;
+
+  if (!currentWeather) {
+    return "Unavailable";
+  }
+
+  const temperature =
+    typeof currentWeather.temperature === "number"
+      ? `${Math.round(currentWeather.temperature)}${forecast.units.temperature}`
+      : "Temp unavailable";
+
+  return `${temperature} · ${currentWeather.condition.label}`;
+}
+
+function getMetricValue(
+  country: Country | null | undefined,
+  isLoading: boolean,
+  isError: boolean,
+  getValue: (country: Country | null | undefined) => string,
+) {
+  if (isLoading) {
+    return "Loading";
+  }
+
+  if (isError) {
+    return "Unavailable";
+  }
+
+  return getValue(country);
+}
+
 export function ComparePage() {
   const router = useRouter();
   const urlSelection = useCompareSearchParams();
@@ -97,12 +161,50 @@ export function ComparePage() {
     (state) => state.clearCompareSelection,
   );
 
+  const leftCode = urlSelection.left;
+  const rightCode = urlSelection.right;
   const selectionCount = getCompareSelectionCount(urlSelection);
+
+  const leftCountryQuery = useCountryDetailQuery(leftCode ?? "", {
+    enabled: Boolean(leftCode),
+  });
+  const rightCountryQuery = useCountryDetailQuery(rightCode ?? "", {
+    enabled: Boolean(rightCode),
+  });
+
+  const leftCountry = leftCountryQuery.data;
+  const rightCountry = rightCountryQuery.data;
+
+  const leftWeatherQuery = useWeatherForecastQuery(
+    leftCountry?.coordinates?.lat,
+    leftCountry?.coordinates?.lng,
+    {
+      enabled: Boolean(leftCountry?.coordinates),
+    },
+  );
+  const rightWeatherQuery = useWeatherForecastQuery(
+    rightCountry?.coordinates?.lat,
+    rightCountry?.coordinates?.lng,
+    {
+      enabled: Boolean(rightCountry?.coordinates),
+    },
+  );
+
+  const leftWeatherLabel = getWeatherLabel(
+    leftWeatherQuery.data,
+    leftWeatherQuery.isLoading,
+    leftWeatherQuery.isError,
+  );
+  const rightWeatherLabel = getWeatherLabel(
+    rightWeatherQuery.data,
+    rightWeatherQuery.isLoading,
+    rightWeatherQuery.isError,
+  );
 
   function handleSwap() {
     const nextSelection = {
-      left: urlSelection.right,
-      right: urlSelection.left,
+      left: rightCode,
+      right: leftCode,
     };
 
     setCompareSelection(nextSelection);
@@ -114,6 +216,22 @@ export function ComparePage() {
     router.push(routes.compare);
   }
 
+  function handleRemove(side: "left" | "right") {
+    const nextSelection =
+      side === "left"
+        ? {
+            left: null,
+            right: rightCode,
+          }
+        : {
+            left: leftCode,
+            right: null,
+          };
+
+    setCompareSelection(nextSelection);
+    router.push(routes.compareSelection(nextSelection));
+  }
+
   return (
     <main className="bg-background">
       <section className="relative overflow-hidden py-16 lg:py-20">
@@ -122,9 +240,13 @@ export function ComparePage() {
         <Container className="relative">
           <SectionHeader
             eyebrow="Compare destinations"
-            title="Build a side-by-side travel view."
-            description="Select two countries from Explore, Country Detail or Favorites, then return here to compare them with context."
-            action={<Badge variant="ocean">{getCompareStatusLabel(selectionCount)}</Badge>}
+            title="Compare countries with practical travel context."
+            description="Review two destinations side by side across country profile, population, currency, language, geography and live weather signals."
+            action={
+              <Badge variant={selectionCount > 1 ? "sage" : "ocean"}>
+                {getCompareStatusLabel(selectionCount)}
+              </Badge>
+            }
           />
 
           <div className="mt-10 grid gap-5 md:grid-cols-3">
@@ -141,20 +263,20 @@ export function ComparePage() {
             <Card className="p-6">
               <p className="travel-label text-muted">Left</p>
               <p className="mt-3 text-4xl font-black tracking-[-0.06em] text-foreground">
-                {urlSelection.left ?? "Open"}
+                {leftCountry?.name ?? leftCode ?? "Open"}
               </p>
               <p className="mt-4 text-sm leading-6 text-muted-strong">
-                First destination slot for the upcoming comparison view.
+                First destination slot for the comparison view.
               </p>
             </Card>
 
             <Card className="p-6">
               <p className="travel-label text-muted">Right</p>
               <p className="mt-3 text-4xl font-black tracking-[-0.06em] text-foreground">
-                {urlSelection.right ?? "Open"}
+                {rightCountry?.name ?? rightCode ?? "Open"}
               </p>
               <p className="mt-4 text-sm leading-6 text-muted-strong">
-                Second destination slot for the upcoming comparison view.
+                Second destination slot for the comparison view.
               </p>
             </Card>
           </div>
@@ -162,16 +284,15 @@ export function ComparePage() {
           <div className="mt-8 overflow-hidden rounded-card border border-border bg-surface shadow-panel">
             <div className="grid gap-6 p-5 lg:grid-cols-[1fr_auto] lg:items-center lg:p-6">
               <div>
-                <Badge variant="sand">Selection board</Badge>
+                <Badge variant="sand">Comparison board</Badge>
 
                 <h2 className="mt-4 text-2xl font-black tracking-[-0.05em] text-foreground">
-                  Prepare the comparison before loading the full country data.
+                  Evaluate the practical tradeoffs between two countries.
                 </h2>
 
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-strong">
-                  This step keeps comparison selection simple and URL-driven.
-                  The next commit will turn these country codes into a complete
-                  side-by-side data view.
+                  The comparison keeps the view readable while still showing the
+                  signals that matter before moving a destination into planning.
                 </p>
               </div>
 
@@ -199,7 +320,16 @@ export function ComparePage() {
           </div>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_auto_1fr] lg:items-stretch">
-            <CompareSlotCard side="Left" code={urlSelection.left} />
+            <CompareCountryPanel
+              side="Left"
+              code={leftCode}
+              country={leftCountry}
+              isLoading={leftCountryQuery.isLoading}
+              isError={leftCountryQuery.isError}
+              weatherLabel={leftWeatherLabel}
+              onRetry={() => void leftCountryQuery.refetch()}
+              onRemove={() => handleRemove("left")}
+            />
 
             <div className="hidden items-center justify-center lg:flex">
               <div className="grid size-14 place-items-center rounded-full border border-border bg-surface text-2xl font-black text-muted-strong shadow-panel">
@@ -207,15 +337,182 @@ export function ComparePage() {
               </div>
             </div>
 
-            <CompareSlotCard side="Right" code={urlSelection.right} />
+            <CompareCountryPanel
+              side="Right"
+              code={rightCode}
+              country={rightCountry}
+              isLoading={rightCountryQuery.isLoading}
+              isError={rightCountryQuery.isError}
+              weatherLabel={rightWeatherLabel}
+              onRetry={() => void rightCountryQuery.refetch()}
+              onRemove={() => handleRemove("right")}
+            />
           </div>
+
+          {selectionCount > 0 ? (
+            <Card className="mt-8 p-5 lg:p-6">
+              <div className="flex flex-col gap-3">
+                <Badge variant="ocean">Side-by-side metrics</Badge>
+
+                <h2 className="text-2xl font-black tracking-[-0.05em] text-foreground">
+                  Country signals at a glance.
+                </h2>
+
+                <p className="max-w-3xl text-sm leading-7 text-muted-strong">
+                  Compare high-level country context without turning the page
+                  into a dense dashboard.
+                </p>
+              </div>
+
+              <div className="mt-6 grid gap-3">
+                <CompareMetricRow
+                  label="Capital"
+                  leftValue={getMetricValue(
+                    leftCountry,
+                    leftCountryQuery.isLoading,
+                    leftCountryQuery.isError,
+                    getCapital,
+                  )}
+                  rightValue={getMetricValue(
+                    rightCountry,
+                    rightCountryQuery.isLoading,
+                    rightCountryQuery.isError,
+                    getCapital,
+                  )}
+                />
+
+                <CompareMetricRow
+                  label="Region"
+                  leftValue={getMetricValue(
+                    leftCountry,
+                    leftCountryQuery.isLoading,
+                    leftCountryQuery.isError,
+                    getRegion,
+                  )}
+                  rightValue={getMetricValue(
+                    rightCountry,
+                    rightCountryQuery.isLoading,
+                    rightCountryQuery.isError,
+                    getRegion,
+                  )}
+                />
+
+                <CompareMetricRow
+                  label="Population"
+                  leftValue={getMetricValue(
+                    leftCountry,
+                    leftCountryQuery.isLoading,
+                    leftCountryQuery.isError,
+                    formatPopulation,
+                  )}
+                  rightValue={getMetricValue(
+                    rightCountry,
+                    rightCountryQuery.isLoading,
+                    rightCountryQuery.isError,
+                    formatPopulation,
+                  )}
+                />
+
+                <CompareMetricRow
+                  label="Currency"
+                  leftValue={getMetricValue(
+                    leftCountry,
+                    leftCountryQuery.isLoading,
+                    leftCountryQuery.isError,
+                    getCurrency,
+                  )}
+                  rightValue={getMetricValue(
+                    rightCountry,
+                    rightCountryQuery.isLoading,
+                    rightCountryQuery.isError,
+                    getCurrency,
+                  )}
+                />
+
+                <CompareMetricRow
+                  label="Languages"
+                  leftValue={getMetricValue(
+                    leftCountry,
+                    leftCountryQuery.isLoading,
+                    leftCountryQuery.isError,
+                    getLanguages,
+                  )}
+                  rightValue={getMetricValue(
+                    rightCountry,
+                    rightCountryQuery.isLoading,
+                    rightCountryQuery.isError,
+                    getLanguages,
+                  )}
+                />
+
+                <CompareMetricRow
+                  label="Weather"
+                  helperText="Current Open-Meteo snapshot when coordinates are available."
+                  leftValue={leftWeatherLabel}
+                  rightValue={rightWeatherLabel}
+                />
+
+                <CompareMetricRow
+                  label="Area"
+                  leftValue={getMetricValue(
+                    leftCountry,
+                    leftCountryQuery.isLoading,
+                    leftCountryQuery.isError,
+                    getArea,
+                  )}
+                  rightValue={getMetricValue(
+                    rightCountry,
+                    rightCountryQuery.isLoading,
+                    rightCountryQuery.isError,
+                    getArea,
+                  )}
+                />
+
+                <CompareMetricRow
+                  label="Timezones"
+                  leftValue={getMetricValue(
+                    leftCountry,
+                    leftCountryQuery.isLoading,
+                    leftCountryQuery.isError,
+                    getTimezones,
+                  )}
+                  rightValue={getMetricValue(
+                    rightCountry,
+                    rightCountryQuery.isLoading,
+                    rightCountryQuery.isError,
+                    getTimezones,
+                  )}
+                />
+
+                <CompareMetricRow
+                  label="Travel context"
+                  leftValue={getMetricValue(
+                    leftCountry,
+                    leftCountryQuery.isLoading,
+                    leftCountryQuery.isError,
+                    getTravelContext,
+                  )}
+                  rightValue={getMetricValue(
+                    rightCountry,
+                    rightCountryQuery.isLoading,
+                    rightCountryQuery.isError,
+                    getTravelContext,
+                  )}
+                />
+              </div>
+            </Card>
+          ) : null}
 
           {selectionCount < 2 ? (
             <Card variant="warm" className="mt-8 p-6">
               <Badge variant="sand">Next step</Badge>
 
               <h2 className="mt-5 text-2xl font-black tracking-[-0.05em] text-foreground">
-                Choose {selectionCount === 0 ? "two destinations" : "one more destination"} to unlock the full comparison.
+                Choose{" "}
+                {selectionCount === 0
+                  ? "two destinations"
+                  : "one more destination"}{" "}
+                to complete the comparison.
               </h2>
 
               <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-strong">
