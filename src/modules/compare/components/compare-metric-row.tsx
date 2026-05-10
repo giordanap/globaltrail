@@ -32,13 +32,19 @@ export function CompareMetricRow({
       </div>
 
       <div className="rounded-2xl bg-surface-soft p-3">
-        <p className="text-sm font-black text-foreground">
+        <p className="mb-1 text-[0.62rem] font-black uppercase tracking-[0.16em] text-muted md:hidden">
+          Left
+        </p>
+        <p className="break-words text-sm font-black text-foreground">
           {normalizeValue(leftValue)}
         </p>
       </div>
 
       <div className="rounded-2xl bg-surface-soft p-3">
-        <p className="text-sm font-black text-foreground">
+        <p className="mb-1 text-[0.62rem] font-black uppercase tracking-[0.16em] text-muted md:hidden">
+          Right
+        </p>
+        <p className="break-words text-sm font-black text-foreground">
           {normalizeValue(rightValue)}
         </p>
       </div>
