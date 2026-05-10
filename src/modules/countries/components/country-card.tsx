@@ -1,9 +1,11 @@
-import Link from "next/link";
-import type { CSSProperties } from "react";
-import { routes } from "@/core/router/routes";
-import type { CountrySummary } from "@/modules/countries/types";
 import { Badge } from "@/shared/components/ui/badge";
 import { Card } from "@/shared/components/ui/card";
+import { createFavoriteFromCountrySummary } from "@/modules/favorites/types";
+import { FavoriteToggleButton } from "@/modules/favorites/components/favorite-toggle-button";
+import { routes } from "@/core/router/routes";
+import Link from "next/link";
+import type { CountrySummary } from "@/modules/countries/types";
+import type { CSSProperties } from "react";
 
 type CountryCardProps = {
   country: CountrySummary;
@@ -55,10 +57,18 @@ function getFlagStyle(country: CountrySummary): CSSProperties | undefined {
 }
 
 export function CountryCard({ country }: CountryCardProps) {
+  const favoriteDestination = createFavoriteFromCountrySummary(country);
+
   return (
     <Card className="group overflow-hidden p-0 transition hover:-translate-y-1 hover:shadow-card">
       <div className="relative min-h-44 overflow-hidden bg-ink">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(219,234,242,0.55),_transparent_16rem),linear-gradient(135deg,_rgba(11,18,32,0.98),_rgba(11,79,117,0.72))]" />
+
+        <FavoriteToggleButton
+          destination={favoriteDestination}
+          variant="compact"
+          className="absolute left-5 top-5 z-10 border-white/20 bg-white/15 text-white shadow-soft backdrop-blur-md hover:bg-white/25 hover:text-white"
+        />
 
         <div
           className="absolute right-5 top-5 size-20 rounded-[1.25rem] border border-white/20 bg-white/15 bg-cover bg-center shadow-soft backdrop-blur-md"
