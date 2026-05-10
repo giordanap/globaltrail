@@ -23,7 +23,7 @@ export function Header() {
           <Link
             href={routes.home}
             aria-label="GlobalTrail home"
-            className="shrink-0"
+            className="shrink-0 rounded-control focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-deep-ocean/20"
           >
             <BrandMark />
           </Link>
@@ -39,11 +39,19 @@ export function Header() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="group relative text-xs font-extrabold uppercase tracking-[0.22em] text-muted-strong transition hover:text-foreground"
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "group relative rounded-control text-xs font-extrabold uppercase tracking-[0.22em] text-muted-strong transition hover:text-foreground",
+                    "focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-deep-ocean/20",
+                    isActive && "text-foreground",
+                  )}
                 >
                   {item.label}
                   {isActive ? (
-                    <span className="absolute -bottom-2 left-0 h-px w-full bg-foreground" />
+                    <span
+                      aria-hidden="true"
+                      className="absolute -bottom-2 left-0 h-px w-full bg-foreground"
+                    />
                   ) : null}
                 </Link>
               );
@@ -55,7 +63,7 @@ export function Header() {
 
             <Link
               href={routes.countries}
-              className="inline-flex min-h-10 items-center justify-center rounded-control border border-border bg-surface px-5 text-sm font-extrabold text-foreground shadow-sm transition hover:border-border-strong hover:bg-surface-soft"
+              className="micro-button inline-flex min-h-10 items-center justify-center rounded-control border border-border bg-surface px-5 text-sm font-extrabold text-foreground shadow-sm transition hover:border-border-strong hover:bg-surface-soft"
             >
               Explore
             </Link>
@@ -63,7 +71,7 @@ export function Header() {
 
           <Link
             href={routes.countries}
-            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-border bg-surface px-4 text-xs font-extrabold uppercase tracking-[0.16em] text-foreground shadow-sm transition hover:border-border-strong md:hidden"
+            className="micro-button inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-border bg-surface px-4 text-xs font-extrabold uppercase tracking-[0.16em] text-foreground shadow-sm transition hover:border-border-strong md:hidden"
           >
             Explore
           </Link>
@@ -80,8 +88,10 @@ export function Header() {
               <Link
                 key={item.label}
                 href={item.href}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "inline-flex min-h-9 shrink-0 items-center justify-center rounded-full border px-4 text-[0.68rem] font-black uppercase tracking-[0.16em] transition",
+                  "focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-deep-ocean/20",
                   isActive
                     ? "border-deep-ocean/20 bg-mist-blue text-deep-ocean"
                     : "border-border bg-surface text-muted-strong hover:border-border-strong hover:text-foreground",
