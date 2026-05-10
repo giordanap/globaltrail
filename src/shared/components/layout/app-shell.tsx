@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Footer } from "@/shared/components/layout/footer";
 import { Header } from "@/shared/components/layout/header";
+import { SkipLink } from "@/shared/components/layout/skip-link";
 
 type AppShellProps = {
   children: ReactNode;
@@ -9,8 +10,13 @@ type AppShellProps = {
 export function AppShell({ children }: AppShellProps) {
   return (
     <div className="flex min-h-screen flex-col">
+      <SkipLink />
       <Header />
-      <div className="flex-1">{children}</div>
+
+      <div id="main-content" tabIndex={-1} className="flex-1 outline-none">
+        {children}
+      </div>
+
       <Footer />
     </div>
   );

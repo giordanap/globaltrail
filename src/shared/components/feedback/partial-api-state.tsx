@@ -33,6 +33,10 @@ function getBadgeVariant(tone: PartialApiStateTone) {
   return "sand";
 }
 
+function getStateRole(tone: PartialApiStateTone) {
+  return tone === "error" ? "alert" : "status";
+}
+
 function PartialApiStateContent({
   eyebrow,
   title,
@@ -45,12 +49,15 @@ function PartialApiStateContent({
   tone = "warning",
 }: PartialApiStateProps) {
   return (
-    <div>
+    <div role={getStateRole(tone)} aria-live={tone === "error" ? "assertive" : "polite"}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <Badge variant={getBadgeVariant(tone)}>{eyebrow}</Badge>
 
         {icon ? (
-          <div className="grid size-11 place-items-center rounded-2xl bg-surface-soft text-xl text-muted-strong">
+          <div
+            aria-hidden="true"
+            className="grid size-11 place-items-center rounded-2xl bg-surface-soft text-xl text-muted-strong"
+          >
             {icon}
           </div>
         ) : null}
@@ -69,6 +76,7 @@ function PartialApiStateContent({
           className="mt-6"
           onClick={onRetry}
           disabled={isRetrying}
+          aria-busy={isRetrying}
           variant={tone === "soft" ? "secondary" : "primary"}
         >
           {isRetrying ? retryingLabel : actionLabel}
