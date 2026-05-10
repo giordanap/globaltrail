@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
   output: "export",
   basePath,
   assetPrefix: basePath,
+  poweredByHeader: false,
+  compress: true,
   images: {
     unoptimized: true,
   },

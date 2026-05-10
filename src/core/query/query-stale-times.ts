@@ -1,9 +1,11 @@
 export const queryStaleTimes = {
   countriesList: 1000 * 60 * 60 * 24,
   countryDetail: 1000 * 60 * 60 * 24,
-  weatherForecast: 1000 * 60 * 20,
-  currencyConversion: 1000 * 60 * 60 * 6,
+  weatherForecast: 1000 * 60 * 30,
+  currencyConversion: 1000 * 60 * 60 * 12,
+  currencies: 1000 * 60 * 60 * 24,
   publicHolidays: 1000 * 60 * 60 * 24 * 7,
+  longWeekends: 1000 * 60 * 60 * 24 * 7,
 } as const;
 
 export const queryGcTimes = {

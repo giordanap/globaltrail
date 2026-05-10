@@ -6,7 +6,7 @@ import { featuredDestinations } from "@/modules/home/data/home-content";
 
 export function FeaturedDestinationsSection() {
   return (
-    <section id="destinations" className="bg-background py-16">
+    <section id="destinations" className="content-auto bg-background py-16">
       <Container>
         <SectionHeader
           eyebrow="Curated atlas"
@@ -23,7 +23,7 @@ export function FeaturedDestinationsSection() {
         />
 
         <div className="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-4">
-          {featuredDestinations.map((destination) => (
+          {featuredDestinations.map((destination, index) => (
             <article
               key={destination.country}
               className="group relative h-[340px] overflow-hidden rounded-card bg-ink shadow-card md:h-[360px] lg:h-[390px]"
@@ -32,14 +32,19 @@ export function FeaturedDestinationsSection() {
                 src={destination.image}
                 alt={`${destination.country} destination preview`}
                 fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                quality={74}
+                sizes="(min-width: 1280px) 280px, (min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
                 className="object-cover transition duration-700 group-hover:scale-105"
+                priority={index === 0}
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/24 to-black/5" />
 
               <div className="absolute left-5 top-5">
-                <Badge variant="neutral" className="border-white/20 bg-white/15 text-white backdrop-blur-md">
+                <Badge
+                  variant="neutral"
+                  className="border-white/20 bg-white/15 text-white backdrop-blur-md"
+                >
                   {destination.signal}
                 </Badge>
               </div>

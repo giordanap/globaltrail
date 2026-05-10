@@ -6,7 +6,7 @@ import { howItWorksSteps } from "@/modules/home/data/home-content";
 
 export function HowItWorksSection() {
   return (
-    <section id="compare" className="bg-surface-muted py-20">
+    <section id="compare" className="content-auto bg-surface-muted py-20">
       <Container>
         <SectionHeader
           align="center"
@@ -21,12 +21,18 @@ export function HowItWorksSection() {
               key={step.title}
               className="relative overflow-hidden border border-white/70 p-8 text-center shadow-sm"
             >
-              <div className="absolute right-5 top-5 text-5xl font-black leading-none text-surface-muted">
+              <div
+                aria-hidden="true"
+                className="absolute right-5 top-5 text-5xl font-black leading-none text-surface-muted"
+              >
                 0{index + 1}
               </div>
 
               <div className="relative">
-                <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-surface-soft text-xl">
+                <div
+                  aria-hidden="true"
+                  className="mx-auto grid size-14 place-items-center rounded-2xl bg-surface-soft text-xl"
+                >
                   {step.icon}
                 </div>
 
