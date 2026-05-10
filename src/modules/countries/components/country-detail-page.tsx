@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 import { Container } from "@/shared/components/ui/container";
 import { CountryDetailSkeleton } from "@/modules/countries/components/country-detail-skeleton";
+import { CurrencyConverterPanel } from "@/modules/currency/components/currency-converter-panel";
 import { EmptyState } from "@/shared/components/feedback/empty-state";
 import { ErrorState } from "@/shared/components/feedback/error-state";
 import { routes } from "@/core/router/routes";
@@ -305,6 +306,8 @@ export function CountryDetailPage() {
                 </div>
               </Card>
 
+              <CurrencyConverterPanel currencies={country.currencies} />
+              
               <WeatherPanel coordinates={country.coordinates} />
 
               <Card className="p-6">
