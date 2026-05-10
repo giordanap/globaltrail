@@ -1,6 +1,6 @@
 {
   "name": "globaltrail",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "analyze": "cross-env ANALYZE=true next build",
+    "release:check": "pnpm lint && pnpm build && pnpm build-storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

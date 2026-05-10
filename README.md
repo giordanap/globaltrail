@@ -392,10 +392,44 @@ Build Storybook:
 pnpm build-storybook
 ```
 
+Run full release validation:
+
+```bash
+pnpm release:check
+```
+
 Analyze bundle:
 
 ```bash
 pnpm analyze
+```
+
+## Release
+
+Current release:
+
+```txt
+GlobalTrail v1.0.0
+```
+
+Release validation:
+
+```bash
+pnpm release:check
+```
+
+Deployment documentation:
+
+```txt
+docs/DEPLOYMENT.md
+docs/RELEASE_CHECKLIST.md
+docs/RELEASE_NOTES_v1.0.0.md
+```
+
+GitHub Pages deployment is handled by:
+
+```txt
+.github/workflows/pages.yml
 ```
 
 ## Validation checklist
@@ -492,4 +526,12 @@ For a more detailed portfolio explanation, see:
 ```txt
 docs/PORTFOLIO_CASE_STUDY.md
 docs/TECHNICAL_OVERVIEW.md
+```
+
+For release operations and deployment details, see:
+
+```txt
+docs/DEPLOYMENT.md
+docs/RELEASE_CHECKLIST.md
+docs/RELEASE_NOTES_v1.0.0.md
 ```
