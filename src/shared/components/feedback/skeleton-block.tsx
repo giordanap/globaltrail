@@ -7,7 +7,7 @@ export function SkeletonBlock({ className, ...props }: SkeletonBlockProps) {
   return (
     <div
       className={cn(
-        "animate-pulse rounded-card bg-surface-muted/80",
+        "travel-shimmer rounded-card bg-surface-muted/80",
         className,
       )}
       {...props}

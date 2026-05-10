@@ -15,7 +15,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-card border border-transparent shadow-panel",
+        "micro-card rounded-card border border-transparent shadow-panel",
         variant === "default" && "bg-surface",
         variant === "soft" && "bg-surface-soft",
         variant === "warm" && "bg-surface-warm",

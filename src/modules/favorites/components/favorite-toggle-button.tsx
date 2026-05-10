@@ -45,18 +45,27 @@ export function FavoriteToggleButton({
           : `Save ${destination.name} to saved destinations`
       }
       className={cn(
-        "inline-flex items-center justify-center rounded-full border font-black transition",
+        "micro-icon-button inline-flex items-center justify-center rounded-full border font-black",
         "focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-deep-ocean/20",
         variant === "compact" && "size-10 text-base",
         variant === "default" && "min-h-12 gap-2 px-5 text-sm",
         isReadyFavorite
-          ? "border-terracotta/30 bg-terracotta/10 text-terracotta hover:bg-terracotta/15"
-          : "border-border bg-surface text-muted-strong hover:border-border-strong hover:text-foreground",
+          ? "border-terracotta/30 bg-terracotta/10 text-terracotta shadow-sm hover:bg-terracotta/15"
+          : "border-border bg-surface text-muted-strong shadow-sm hover:border-border-strong hover:bg-surface-soft hover:text-foreground",
         !isClient && "cursor-wait opacity-70",
         className,
       )}
     >
-      <span aria-hidden="true">{isReadyFavorite ? "♥" : "♡"}</span>
+      <span
+        aria-hidden="true"
+        className={cn(
+          "leading-none transition-transform duration-200 ease-out",
+          isReadyFavorite && "scale-110",
+        )}
+      >
+        {isReadyFavorite ? "♥" : "♡"}
+      </span>
+
       {variant === "default" ? (
         <span>{isReadyFavorite ? "Saved" : "Save destination"}</span>
       ) : null}

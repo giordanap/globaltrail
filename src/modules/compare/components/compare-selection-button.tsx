@@ -59,18 +59,28 @@ export function CompareSelectionButton({
       aria-pressed={isSelected}
       aria-label={`Select ${countryName} for destination comparison`}
       className={cn(
-        "inline-flex items-center justify-center rounded-control font-extrabold transition",
+        "micro-button inline-flex items-center justify-center rounded-control font-extrabold",
         "focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-deep-ocean/20",
         variant === "card" &&
           "min-h-10 border border-border bg-surface px-4 text-xs uppercase tracking-[0.16em] text-muted-strong shadow-sm hover:border-border-strong hover:bg-surface-soft hover:text-foreground",
         variant === "detail" &&
           "min-h-12 border border-border bg-surface px-6 text-sm text-foreground shadow-sm hover:border-border-strong hover:bg-surface-soft",
         isSelected &&
-          "border-deep-ocean/20 bg-mist-blue text-deep-ocean hover:bg-mist-blue",
+          "border-deep-ocean/20 bg-mist-blue text-deep-ocean shadow-sm hover:bg-mist-blue",
         className,
       )}
     >
-      {getButtonLabel(isSelected, selectionCount)}
+      <span className="relative inline-flex items-center gap-2">
+        {isSelected ? (
+          <span
+            aria-hidden="true"
+            className="grid size-4 place-items-center rounded-full bg-deep-ocean text-[0.55rem] text-white"
+          >
+            ✓
+          </span>
+        ) : null}
+        {getButtonLabel(isSelected, selectionCount)}
+      </span>
     </button>
   );
 }
