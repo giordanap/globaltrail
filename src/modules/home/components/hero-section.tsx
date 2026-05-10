@@ -10,8 +10,8 @@ import { withBasePath } from "@/core/router/base-path";
 export function HeroSection() {
   return (
     <section id="top" className="overflow-hidden bg-background">
-      <Container className="py-20 lg:py-24">
-        <div className="grid gap-16 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+      <Container className="py-16 sm:py-20 lg:py-24">
+        <div className="grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-16">
           <div>
             <Eyebrow className="mb-7">● Live travel insights</Eyebrow>
 
@@ -42,17 +42,18 @@ export function HeroSection() {
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            <article className="travel-panel relative w-full max-w-[610px] p-6">
+            <article className="travel-panel relative w-full max-w-[610px] p-4 sm:p-6">
               <div className="absolute -right-10 -top-10 hidden size-32 rounded-full bg-mist-blue/70 blur-2xl lg:block" />
               <div className="absolute -bottom-8 -left-8 hidden size-28 rounded-full bg-sage/80 blur-2xl lg:block" />
 
-              <div className="relative h-[470px] overflow-hidden rounded-card bg-ink sm:h-[510px] lg:h-[550px]">
+              <div className="relative h-[420px] overflow-hidden rounded-card bg-ink sm:h-[510px] lg:h-[550px]">
                 <Image
                   src={withBasePath("/images/globaltrail/hero-globe.webp")}
                   alt="Abstract globe representing global travel insights"
                   fill
                   priority
-                  sizes="(min-width: 1024px) 610px, 100vw"
+                  quality={78}
+                  sizes="(min-width: 1280px) 610px, (min-width: 1024px) 52vw, 100vw"
                   className="object-cover"
                 />
 
@@ -78,7 +79,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
+        <div className="content-auto-sm mt-16 grid gap-6 md:grid-cols-3">
           {insightCards.map((card) => (
             <StatCard
               key={card.value}

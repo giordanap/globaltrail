@@ -305,3 +305,26 @@ a {
     transform: none;
   }
 }
+
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}
+
+.content-auto-sm {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 520px;
+}
+
+.content-auto-lg {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1200px;
+}
+
+@media (max-width: 768px) {
+  .content-auto,
+  .content-auto-sm,
+  .content-auto-lg {
+    contain-intrinsic-size: 1px 720px;
+  }
+}
