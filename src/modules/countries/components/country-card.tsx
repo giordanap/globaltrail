@@ -1,11 +1,12 @@
+import Link from "next/link";
+import type { CSSProperties } from "react";
+import { routes } from "@/core/router/routes";
+import { CompareSelectionButton } from "@/modules/compare/components/compare-selection-button";
+import type { CountrySummary } from "@/modules/countries/types";
+import { FavoriteToggleButton } from "@/modules/favorites/components/favorite-toggle-button";
+import { createFavoriteFromCountrySummary } from "@/modules/favorites/types";
 import { Badge } from "@/shared/components/ui/badge";
 import { Card } from "@/shared/components/ui/card";
-import { createFavoriteFromCountrySummary } from "@/modules/favorites/types";
-import { FavoriteToggleButton } from "@/modules/favorites/components/favorite-toggle-button";
-import { routes } from "@/core/router/routes";
-import Link from "next/link";
-import type { CountrySummary } from "@/modules/countries/types";
-import type { CSSProperties } from "react";
 
 type CountryCardProps = {
   country: CountrySummary;
@@ -135,13 +136,10 @@ export function CountryCard({ country }: CountryCardProps) {
         </p>
 
         <div className="mt-6 flex items-center justify-between gap-4">
-          <button
-            type="button"
-            disabled
-            className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-muted-strong disabled:opacity-60"
-          >
-            Compare
-          </button>
+          <CompareSelectionButton
+            countryCode={country.alpha2Code}
+            countryName={country.name}
+          />
 
           <Link
             href={routes.countryDetail(country.alpha2Code)}

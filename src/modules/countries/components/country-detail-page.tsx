@@ -18,6 +18,7 @@ import type { Country } from "@/modules/countries/types";
 import type { CSSProperties } from "react";
 import { FavoriteToggleButton } from "@/modules/favorites/components/favorite-toggle-button";
 import { createFavoriteFromCountry } from "@/modules/favorites/types";
+import { CompareSelectionButton } from "@/modules/compare/components/compare-selection-button";
 
 const populationFormatter = new Intl.NumberFormat("en");
 const compactPopulationFormatter = new Intl.NumberFormat("en", {
@@ -349,15 +350,14 @@ export function CountryDetailPage() {
               </Card>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <Link
-                  href={routes.compareCountries(country.alpha2Code, "JP")}
-                  className="inline-flex min-h-12 items-center justify-center rounded-control border border-border bg-surface px-6 text-sm font-extrabold text-foreground shadow-sm transition hover:border-border-strong hover:bg-surface-soft"
-                >
-                  Compare destination
-                </Link>
+                <CompareSelectionButton
+                  countryCode={country.alpha2Code}
+                  countryName={country.name}
+                  variant="detail"
+                />
 
                 <Link
-                  href={routes.planner}
+                  href={routes.plannerDestination(country.alpha2Code)}
                   className="inline-flex min-h-12 items-center justify-center rounded-control bg-ink px-6 text-sm font-extrabold !text-white shadow-sm hover:bg-ink-soft"
                 >
                   Add to planner
