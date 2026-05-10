@@ -6,9 +6,9 @@ import {
   useCurrenciesQuery,
   useCurrencyConversionQuery,
 } from "@/modules/currency/hooks/use-currency-query";
+import { PartialApiState } from "@/shared/components/feedback/partial-api-state";
 import { SkeletonBlock } from "@/shared/components/feedback/skeleton-block";
 import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 import { Input } from "@/shared/components/ui/input";
 import { Select } from "@/shared/components/ui/select";
@@ -96,16 +96,13 @@ export function CurrencyConverterPanel({
 
   if (!primaryCurrency) {
     return (
-      <Card className="p-6">
-        <Badge variant="sand">Currency unavailable</Badge>
-        <h2 className="mt-5 text-xl font-black tracking-[-0.03em] text-foreground">
-          No local currency found.
-        </h2>
-        <p className="mt-3 text-sm leading-7 text-muted-strong">
-          This destination does not include currency data, so conversion cannot
-          be calculated yet.
-        </p>
-      </Card>
+      <PartialApiState
+        eyebrow="Currency unavailable"
+        title="No local currency found."
+        description="This destination does not include currency data, so conversion cannot be calculated yet."
+        icon="¤"
+        tone="soft"
+      />
     );
   }
 
@@ -129,8 +126,24 @@ export function CurrencyConverterPanel({
             </p>
           </div>
 
-          <Badge variant="sage">Frankfurter</Badge>
+          <Badge variant={currenciesQuery.isError ? "sand" : "sage"}>
+            Currency signal
+          </Badge>
         </div>
+
+        {currenciesQuery.isError ? (
+          <PartialApiState
+            className="mt-6"
+            surface="inline"
+            eyebrow="Currency list limited"
+            title="Some currency options could not refresh."
+            description="You can still use common target currencies while the destination insight remains available."
+            icon="¤"
+            tone="soft"
+            onRetry={() => void currenciesQuery.refetch()}
+            isRetrying={currenciesQuery.isRefetching}
+          />
+        ) : null}
 
         <div className="mt-6 grid gap-4 sm:grid-cols-[1fr_180px]">
           <Input
@@ -160,23 +173,16 @@ export function CurrencyConverterPanel({
 
       <div className="border-t border-border p-6">
         {conversionQuery.isError ? (
-          <div>
-            <Badge variant="terracotta">Conversion unavailable</Badge>
-            <h3 className="mt-5 text-xl font-black tracking-[-0.03em] text-foreground">
-              We could not convert this amount.
-            </h3>
-            <p className="mt-3 text-sm leading-7 text-muted-strong">
-              Currency conversion is temporarily unavailable. The rest of the
-              destination insight remains available.
-            </p>
-            <Button
-              className="mt-6"
-              onClick={() => void conversionQuery.refetch()}
-              disabled={conversionQuery.isRefetching}
-            >
-              {conversionQuery.isRefetching ? "Retrying..." : "Try again"}
-            </Button>
-          </div>
+          <PartialApiState
+            surface="inline"
+            eyebrow="Conversion unavailable"
+            title="We could not convert this amount."
+            description="Currency conversion is temporarily unavailable. The rest of the destination insight remains available."
+            icon="¤"
+            tone="error"
+            onRetry={() => void conversionQuery.refetch()}
+            isRetrying={conversionQuery.isRefetching}
+          />
         ) : (
           <div>
             <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.16em] text-muted">
