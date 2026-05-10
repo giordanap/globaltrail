@@ -1,18 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import type { CSSProperties } from "react";
-import { routes } from "@/core/router/routes";
-import { useCountryDetailQuery } from "@/modules/countries/hooks/use-countries-query";
-import type { Country } from "@/modules/countries/types";
-import { CountryDetailSkeleton } from "@/modules/countries/components/country-detail-skeleton";
-import { EmptyState } from "@/shared/components/feedback/empty-state";
-import { ErrorState } from "@/shared/components/feedback/error-state";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
 import { Container } from "@/shared/components/ui/container";
+import { CountryDetailSkeleton } from "@/modules/countries/components/country-detail-skeleton";
+import { EmptyState } from "@/shared/components/feedback/empty-state";
+import { ErrorState } from "@/shared/components/feedback/error-state";
+import { routes } from "@/core/router/routes";
+import { useCountryDetailQuery } from "@/modules/countries/hooks/use-countries-query";
+import { useSearchParams } from "next/navigation";
+import { WeatherPanel } from "@/modules/weather/components/weather-panel";
+import Link from "next/link";
+import type { Country } from "@/modules/countries/types";
+import type { CSSProperties } from "react";
 
 const populationFormatter = new Intl.NumberFormat("en");
 const compactPopulationFormatter = new Intl.NumberFormat("en", {
@@ -303,6 +304,8 @@ export function CountryDetailPage() {
                   />
                 </div>
               </Card>
+
+              <WeatherPanel coordinates={country.coordinates} />
 
               <Card className="p-6">
                 <p className="travel-label text-muted">Geography</p>
