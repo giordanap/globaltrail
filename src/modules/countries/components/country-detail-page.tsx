@@ -9,6 +9,7 @@ import { CurrencyConverterPanel } from "@/modules/currency/components/currency-c
 import { EmptyState } from "@/shared/components/feedback/empty-state";
 import { ErrorState } from "@/shared/components/feedback/error-state";
 import { HolidaysPanel } from "@/modules/holidays/components/holidays-panel";
+import { TravelNotesPanel } from "@/modules/notes/components/travel-notes-panel";
 import { routes } from "@/core/router/routes";
 import { useCountryDetailQuery } from "@/modules/countries/hooks/use-countries-query";
 import { useSearchParams } from "next/navigation";
@@ -322,6 +323,11 @@ export function CountryDetailPage() {
               <WeatherPanel coordinates={country.coordinates} />
 
               <HolidaysPanel
+                countryCode={country.alpha2Code}
+                countryName={country.name}
+              />
+
+              <TravelNotesPanel
                 countryCode={country.alpha2Code}
                 countryName={country.name}
               />
