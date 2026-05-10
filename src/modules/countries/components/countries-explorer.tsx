@@ -51,14 +51,14 @@ export function CountriesExplorer({
   onClearFilters,
 }: CountriesExplorerProps) {
   return (
-    <div className="mt-10 grid gap-8 lg:grid-cols-[280px_1fr]">
+    <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-[280px_1fr] lg:gap-8">
       <CountriesFiltersPanel
         selectedRegion={region}
         onRegionChange={onRegionChange}
         onClearFilters={onClearFilters}
       />
 
-      <div>
+      <div className="min-w-0">
         <CountriesToolbar
           key={query}
           totalCount={totalCount}
@@ -75,13 +75,13 @@ export function CountriesExplorer({
           onSortChange={onSortChange}
         />
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {countries.map((country) => (
             <CountryCard key={country.alpha3Code} country={country} />
           ))}
         </div>
 
-        <Card className="mt-8 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <Card className="mt-6 flex flex-col gap-5 p-4 sm:p-5 md:flex-row md:items-center md:justify-between">
           <div>
             <Badge variant={isSearching || region !== "All" ? "ocean" : "sage"}>
               {isSearching || region !== "All"
@@ -89,23 +89,23 @@ export function CountriesExplorer({
                 : "Preview list"}
             </Badge>
             <p className="mt-3 text-sm leading-6 text-muted-strong">
-              Search, region and sorting are now reflected in the URL so the
+              Search, region and sorting are reflected in the URL so the
               explorer state can be shared or refreshed.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
             <button
               type="button"
               disabled
-              className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-muted-strong disabled:opacity-60"
+              className="min-h-10 rounded-full border border-border bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-muted-strong disabled:opacity-60"
             >
               Previous
             </button>
             <button
               type="button"
               disabled
-              className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-muted-strong disabled:opacity-60"
+              className="min-h-10 rounded-full border border-border bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-muted-strong disabled:opacity-60"
             >
               Next
             </button>

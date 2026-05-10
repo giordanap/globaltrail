@@ -105,7 +105,7 @@ export function CountriesToolbar({
   }
 
   return (
-    <div className="rounded-card border border-border bg-surface p-5 shadow-panel">
+    <div className="rounded-card border border-border bg-surface p-4 shadow-panel sm:p-5">
       <div className="grid gap-4 lg:grid-cols-[1fr_220px] lg:items-end">
         <Input
           label="Search destinations"
@@ -139,7 +139,12 @@ export function CountriesToolbar({
         </p>
 
         {isSearching ? (
-          <Button size="sm" variant="secondary" onClick={handleClearQuery}>
+          <Button
+            size="sm"
+            variant="secondary"
+            className="w-full sm:w-auto"
+            onClick={handleClearQuery}
+          >
             Clear search
           </Button>
         ) : (
@@ -163,13 +168,13 @@ export function CountriesToolbar({
             </button>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
             {recentSearches.map((search) => (
               <button
                 key={search}
                 type="button"
                 onClick={() => handleSelectRecentSearch(search)}
-                className="rounded-full border border-border bg-surface-soft px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-muted-strong transition hover:border-border-strong hover:text-foreground"
+                className="shrink-0 rounded-full border border-border bg-surface-soft px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-muted-strong transition hover:border-border-strong hover:text-foreground"
               >
                 {search}
               </button>

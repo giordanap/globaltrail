@@ -7,7 +7,7 @@ import { Container } from "@/shared/components/ui/container";
 export function Footer() {
   return (
     <footer className="border-t border-border bg-surface">
-      <Container className="py-12">
+      <Container className="py-10 sm:py-12">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_1.6fr] lg:items-start">
           <div>
             <BrandMark />
@@ -28,12 +28,12 @@ export function Footer() {
               <div key={group.title}>
                 <h2 className="travel-label text-muted">{group.title}</h2>
 
-                <ul className="mt-4 space-y-3">
+                <ul className="mt-4 grid gap-3">
                   {group.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm font-semibold text-muted-strong underline-offset-4 transition hover:text-foreground hover:underline"
+                        className="inline-flex min-h-8 items-center text-sm font-semibold text-muted-strong underline-offset-4 transition hover:text-foreground hover:underline"
                       >
                         {link.label}
                       </Link>
@@ -45,10 +45,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted-strong md:flex-row md:items-center md:justify-between">
+        <div className="mt-10 flex flex-col gap-5 border-t border-border pt-6 text-xs text-muted-strong sm:mt-12 md:flex-row md:items-center md:justify-between">
           <p>© 2026 GlobalTrail. Built for smarter travel decisions.</p>
 
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
             <span>Explore</span>
             <span>Compare</span>
             <span>Planner</span>

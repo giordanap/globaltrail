@@ -34,11 +34,11 @@ export function CountriesFiltersPanel({
   onClearFilters,
 }: CountriesFiltersPanelProps) {
   return (
-    <aside className="lg:sticky lg:top-24 lg:self-start">
-      <Card className="p-6">
+    <aside className="min-w-0 lg:sticky lg:top-28 lg:self-start">
+      <Card className="p-4 sm:p-5 lg:p-6">
         <div>
           <p className="travel-label text-muted">Filters</p>
-          <h2 className="mt-3 text-2xl font-black tracking-[-0.04em] text-foreground">
+          <h2 className="mt-3 text-xl font-black tracking-[-0.04em] text-foreground sm:text-2xl">
             Refine your atlas
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted-strong">
@@ -47,10 +47,10 @@ export function CountriesFiltersPanel({
           </p>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-6 lg:mt-8">
           <h3 className="text-sm font-black text-foreground">Region</h3>
 
-          <div className="mt-4 grid gap-3">
+          <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1 lg:mx-0 lg:grid lg:gap-3 lg:overflow-visible lg:px-0 lg:pb-0">
             {regions.map((region) => {
               const isSelected = selectedRegion === region;
 
@@ -60,7 +60,7 @@ export function CountriesFiltersPanel({
                   type="button"
                   onClick={() => onRegionChange(region)}
                   className={cn(
-                    "flex items-center justify-between rounded-2xl border px-4 py-3 text-sm font-semibold transition",
+                    "flex min-h-11 shrink-0 items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold transition lg:w-full",
                     isSelected
                       ? "border-deep-ocean/25 bg-mist-blue text-deep-ocean-strong"
                       : "border-border bg-surface text-muted-strong hover:border-border-strong hover:text-foreground",
@@ -83,7 +83,7 @@ export function CountriesFiltersPanel({
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-6 lg:mt-8">
           <h3 className="text-sm font-black text-foreground">Travel signals</h3>
 
           <div className="mt-4 flex flex-wrap gap-2">
@@ -101,7 +101,7 @@ export function CountriesFiltersPanel({
         <Button
           type="button"
           variant="secondary"
-          className="mt-8 w-full"
+          className="mt-6 w-full lg:mt-8"
           onClick={onClearFilters}
         >
           Reset filters
