@@ -1,7 +1,9 @@
 "use client";
 
 import type { FormEvent } from "react";
-import { useTravelNotesStore } from "@/modules/notes/store";
+import { useTravelNotesStore } from "@/modules/notes/store/travel-notes.store";
+import { ClientOnly } from "@/shared/components/client/client-only";
+import { ClientStatePanelFallback } from "@/shared/components/feedback/client-state-fallback";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Card } from "@/shared/components/ui/card";
@@ -31,7 +33,7 @@ function formatUpdatedAt(value: string) {
   return `Updated ${updatedAtFormatter.format(date)}`;
 }
 
-export function TravelNotesPanel({
+function TravelNotesPanelContent({
   countryCode,
   countryName,
 }: TravelNotesPanelProps) {
@@ -132,5 +134,28 @@ export function TravelNotesPanel({
         )}
       </form>
     </Card>
+  );
+}
+
+export function TravelNotesPanel({
+  countryCode,
+  countryName,
+}: TravelNotesPanelProps) {
+  return (
+    <ClientOnly
+      fallback={
+        <ClientStatePanelFallback
+          eyebrow="Travel note"
+          icon="✎"
+          title={`Preparing notes for ${countryName}.`}
+          description="Your destination notes will appear here once the panel is ready."
+        />
+      }
+    >
+      <TravelNotesPanelContent
+        countryCode={countryCode}
+        countryName={countryName}
+      />
+    </ClientOnly>
   );
 }
