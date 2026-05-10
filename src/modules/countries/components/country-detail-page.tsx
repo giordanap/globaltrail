@@ -16,6 +16,8 @@ import { WeatherPanel } from "@/modules/weather/components/weather-panel";
 import Link from "next/link";
 import type { Country } from "@/modules/countries/types";
 import type { CSSProperties } from "react";
+import { FavoriteToggleButton } from "@/modules/favorites/components/favorite-toggle-button";
+import { createFavoriteFromCountry } from "@/modules/favorites/types";
 
 const populationFormatter = new Intl.NumberFormat("en");
 const compactPopulationFormatter = new Intl.NumberFormat("en", {
@@ -187,6 +189,8 @@ export function CountryDetailPage() {
     );
   }
 
+  const favoriteDestination = createFavoriteFromCountry(country);
+
   return (
     <main className="bg-background">
       <section className="py-16 lg:py-20">
@@ -218,7 +222,7 @@ export function CountryDetailPage() {
                 </div>
 
                 <div className="relative flex min-h-[22rem] flex-col justify-end p-8 text-white">
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <Badge
                       variant="neutral"
                       className="border-white/20 bg-white/15 text-white backdrop-blur-md"
@@ -232,6 +236,11 @@ export function CountryDetailPage() {
                     >
                       {country.alpha2Code}
                     </Badge>
+
+                    <FavoriteToggleButton
+                      destination={favoriteDestination}
+                      className="border-white/20 bg-white/15 text-white shadow-soft backdrop-blur-md hover:bg-white/25 hover:text-white"
+                    />
                   </div>
 
                   <h1 className="travel-heading mt-6 max-w-2xl text-[clamp(3rem,6vw,5.4rem)] leading-[0.92] text-white">
